@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/song-of-distance-swipe/static/css/main.7fce7676.chunk.css",
+    "main.js": "/song-of-distance-swipe/static/js/main.1e55db4f.chunk.js",
+    "main.js.map": "/song-of-distance-swipe/static/js/main.1e55db4f.chunk.js.map",
+    "runtime-main.js": "/song-of-distance-swipe/static/js/runtime-main.10d7d4db.js",
+    "runtime-main.js.map": "/song-of-distance-swipe/static/js/runtime-main.10d7d4db.js.map",
+    "static/js/2.ee1fd9b6.chunk.js": "/song-of-distance-swipe/static/js/2.ee1fd9b6.chunk.js",
+    "static/js/2.ee1fd9b6.chunk.js.map": "/song-of-distance-swipe/static/js/2.ee1fd9b6.chunk.js.map",
+    "index.html": "/song-of-distance-swipe/index.html",
+    "precache-manifest.e88f93f9d3b637564c546edd144457ea.js": "/song-of-distance-swipe/precache-manifest.e88f93f9d3b637564c546edd144457ea.js",
+    "service-worker.js": "/song-of-distance-swipe/service-worker.js",
+    "static/css/main.7fce7676.chunk.css.map": "/song-of-distance-swipe/static/css/main.7fce7676.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.10d7d4db.js",
+    "static/js/2.ee1fd9b6.chunk.js",
+    "static/css/main.7fce7676.chunk.css",
+    "static/js/main.1e55db4f.chunk.js"
+  ]
+}
