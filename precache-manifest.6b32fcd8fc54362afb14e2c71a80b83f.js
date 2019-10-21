@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "dbaa091cf70c70b8b3890940a20cb3d0",
+    "revision": "0bdb4fc1b347101bae5d806dfe258051",
     "url": "/song-of-distance-swipe/index.html"
   },
   {
-    "revision": "3fb9f1a5616ba2e489cd",
+    "revision": "dd61152bfd830c72d4f4",
     "url": "/song-of-distance-swipe/static/css/main.7fce7676.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/song-of-distance-swipe/static/js/2.ee1fd9b6.chunk.js"
   },
   {
-    "revision": "3fb9f1a5616ba2e489cd",
-    "url": "/song-of-distance-swipe/static/js/main.1e55db4f.chunk.js"
+    "revision": "dd61152bfd830c72d4f4",
+    "url": "/song-of-distance-swipe/static/js/main.0feb4632.chunk.js"
   },
   {
     "revision": "bbdabcbc48ecd83c7a44",
