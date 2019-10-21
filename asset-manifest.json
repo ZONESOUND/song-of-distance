@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/song-of-distance-swipe/static/css/main.7fce7676.chunk.css",
-    "main.js": "/song-of-distance-swipe/static/js/main.0feb4632.chunk.js",
-    "main.js.map": "/song-of-distance-swipe/static/js/main.0feb4632.chunk.js.map",
+    "main.css": "/song-of-distance-swipe/static/css/main.b100e6da.chunk.css",
+    "main.js": "/song-of-distance-swipe/static/js/main.bce17dad.chunk.js",
+    "main.js.map": "/song-of-distance-swipe/static/js/main.bce17dad.chunk.js.map",
     "runtime-main.js": "/song-of-distance-swipe/static/js/runtime-main.10d7d4db.js",
     "runtime-main.js.map": "/song-of-distance-swipe/static/js/runtime-main.10d7d4db.js.map",
     "static/js/2.ee1fd9b6.chunk.js": "/song-of-distance-swipe/static/js/2.ee1fd9b6.chunk.js",
     "static/js/2.ee1fd9b6.chunk.js.map": "/song-of-distance-swipe/static/js/2.ee1fd9b6.chunk.js.map",
     "index.html": "/song-of-distance-swipe/index.html",
-    "precache-manifest.6b32fcd8fc54362afb14e2c71a80b83f.js": "/song-of-distance-swipe/precache-manifest.6b32fcd8fc54362afb14e2c71a80b83f.js",
+    "precache-manifest.0f3de802b112fe7b0b36c817f2cdb557.js": "/song-of-distance-swipe/precache-manifest.0f3de802b112fe7b0b36c817f2cdb557.js",
     "service-worker.js": "/song-of-distance-swipe/service-worker.js",
-    "static/css/main.7fce7676.chunk.css.map": "/song-of-distance-swipe/static/css/main.7fce7676.chunk.css.map"
+    "static/css/main.b100e6da.chunk.css.map": "/song-of-distance-swipe/static/css/main.b100e6da.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.10d7d4db.js",
     "static/js/2.ee1fd9b6.chunk.js",
-    "static/css/main.7fce7676.chunk.css",
-    "static/js/main.0feb4632.chunk.js"
+    "static/css/main.b100e6da.chunk.css",
+    "static/js/main.bce17dad.chunk.js"
   ]
 }
