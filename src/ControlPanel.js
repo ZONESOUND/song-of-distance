@@ -3,15 +3,20 @@ import P5Wrapper from 'react-p5-wrapper';
 import sketch from './sketch';
 import {earthLocRef} from './firebase';
 import * as dat from 'dat.gui';
+import {gpsPermission, gpsData, setupGPS} from './gps';
 
+const SESSION_ID = 'generative_geo_id';
+const SESSION_TIME = 'generative_geo_id_time';
 
 class LocData extends Component {
     state = {
+        gp: {},
         allLocations: [],
         dataPoint: []
     }
 
     componentDidMount() {
+        this.initGPS();
         earthLocRef.on('value', (snapshot) => {
             //console.log(snapshot.val());
             this.setState({
@@ -20,6 +25,28 @@ class LocData extends Component {
             //getAll();
             this.updateDataSet();
         });
+    }
+
+    initGPS = () => {
+        let myId;
+        let lastId = localStorage.getItem(SESSION_ID)
+        let lastIdTime = localStorage.getItem(SESSION_TIME)
+        if (lastId && (Date.now() - lastIdTime < 60*1000)){
+            console.log("Old Id Detected! use " + lastId)
+            myId = lastId
+            localStorage.setItem(SESSION_TIME, Date.now())
+        } else{
+            myId = earthLocRef.push().key;
+            
+            console.log("Generate new id " + myId)
+            localStorage.setItem(SESSION_ID,myId)
+            localStorage.setItem(SESSION_TIME, Date.now())
+        }
+        setupGPS();
+        if (gpsPermission) {
+            gpsData.key = myId;
+            gpsData.showId = getShowId();
+        }
     }
 
     updateDataSet = () => {
@@ -65,36 +92,40 @@ class LocData extends Component {
     }
 
     render() {
-        return (
-        <ControlPanel dataPoint={this.state.dataPoint}/>
+        return (<>
+            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>}
+            </>
         );
     }
 }
 
 class ControlPanel extends Component {
     state = {
+        
         data: {
             globalScale: 250000,
             globalPow: 0.58,
             maxLineLength: 100,
             radioSpeed: 0.8,
-            lat: 42.35,
-            lon: -71.05,
+            lat: gpsData.lat,
+            lon: gpsData.lon,
             centerName: 'center'
         }, 
         GUI: new dat.GUI()
     }
 
+    
+
     componentDidMount() {
-        let dataStore = sessionStorage.getItem('controlData');
-        console.log(dataStore);
+        //let dataStore = sessionStorage.getItem('controlData');
+        //console.log(dataStore);
         let {data, GUI} = this.state;
-        if (dataStore) {
-            data = JSON.parse(dataStore);
-            this.setState({
-                data: data
-            })
-        } 
+        //if (dataStore) {
+        // data = JSON.parse(dataStore);
+        //     this.setState({
+        //         data: data
+        //     })
+        //} 
         const btn = {'add config': this.saveControlData};
         GUI.add(data,"globalScale",1000,800000)
         GUI.add(data,"globalPow",0,0.99)
@@ -107,6 +138,8 @@ class ControlPanel extends Component {
 
         GUI.close()
     }
+
+    
     
     saveControlData = () => {
         let {data} = this.state;

@@ -40,7 +40,9 @@ export default function sketch (p) {
     let updateDataPoint = () => {
         console.log('updateDataPoint');
         let num = p.int(p.frameCount / 4);
-        dataPoint = allDataPoint.map(dataPointMap).slice(-num);
+        if (num) {
+            dataPoint = allDataPoint.map(dataPointMap).slice(-num);
+        }
         enableUpdate = num > allDataPoint.length ? false : true;
     }
 
