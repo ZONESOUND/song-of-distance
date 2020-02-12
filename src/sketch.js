@@ -1,4 +1,4 @@
-import {emitOSC, isSocketConnect} from './socketUsage';
+import {receiveOSC, emitOSC, isSocketConnect} from './socketUsage';
 //import {earthLocRef} from './firebase';
 
 export default function sketch (p) {
@@ -8,12 +8,23 @@ export default function sketch (p) {
     let dataPoint = [];
     let configData = {};
     let enableUpdate = true;
+    let lightCounter = 0;
+    let myId;
+
+    receiveOSC((data)=>{
+        if (data.address=="/gps/trigger"){
+            let scanId = JSON.parse(data.args[0].value).id
+            // console.log(scanId)
+            if (scanId == myId){
+                lightCounter = 0;
+            }
+        }
+    });
 
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.frameRate(30);
         console.log('issocketConnect:' + isSocketConnect);
-        
     };
 
     p.windowResized = () =>  {
@@ -27,6 +38,10 @@ export default function sketch (p) {
         if (props.dataPoint && Object.keys(configData).length !== 0){
             allDataPoint = props.dataPoint;
             updateDataPoint();
+        }
+        if (props.myId) {
+            console.log(props.myId);
+            myId = props.myId;
         }
     };
 
@@ -58,7 +73,8 @@ export default function sketch (p) {
         if (p.frameCount % 30 === 0)
             emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
 
-        p.background(0, 100);
+        lightCounter++;
+        p.background(255/lightCounter, 100);
         p.textSize(12)
         p.fill(255)
         p.stroke(255,10)

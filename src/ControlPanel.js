@@ -16,7 +16,8 @@ class LocData extends Component {
     }
 
     componentDidMount() {
-        this.initGPS();
+        //this.initGPS();
+        setupGPS();
         earthLocRef.on('value', (snapshot) => {
             //console.log(snapshot.val());
             this.setState({
@@ -28,25 +29,7 @@ class LocData extends Component {
     }
 
     initGPS = () => {
-        let myId;
-        let lastId = localStorage.getItem(SESSION_ID)
-        let lastIdTime = localStorage.getItem(SESSION_TIME)
-        if (lastId && (Date.now() - lastIdTime < 60*1000)){
-            console.log("Old Id Detected! use " + lastId)
-            myId = lastId
-            localStorage.setItem(SESSION_TIME, Date.now())
-        } else{
-            myId = earthLocRef.push().key;
-            
-            console.log("Generate new id " + myId)
-            localStorage.setItem(SESSION_ID,myId)
-            localStorage.setItem(SESSION_TIME, Date.now())
-        }
-        setupGPS();
-        if (gpsPermission) {
-            gpsData.key = myId;
-            gpsData.showId = getShowId();
-        }
+        
     }
 
     updateDataSet = () => {
@@ -101,7 +84,6 @@ class LocData extends Component {
 
 class ControlPanel extends Component {
     state = {
-        
         data: {
             globalScale: 250000,
             globalPow: 0.58,
@@ -117,6 +99,7 @@ class ControlPanel extends Component {
     
 
     componentDidMount() {
+        this.addGPSKey();
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
         let {data, GUI} = this.state;
@@ -139,6 +122,25 @@ class ControlPanel extends Component {
         GUI.close()
     }
 
+    addGPSKey = () => {
+        let myId;
+        let lastId = localStorage.getItem(SESSION_ID)
+        let lastIdTime = localStorage.getItem(SESSION_TIME)
+        if (lastId && (Date.now() - lastIdTime < 60*1000)){
+            console.log("Old Id Detected! use " + lastId)
+            myId = lastId
+            localStorage.setItem(SESSION_TIME, Date.now())
+        } else{
+            myId = earthLocRef.push().key;
+            
+            console.log("Generate new id " + myId)
+            localStorage.setItem(SESSION_ID,myId)
+            localStorage.setItem(SESSION_TIME, Date.now())
+        }
+            
+        gpsData.key = myId;
+        gpsData.showId = getShowId(myId);
+    }
     
     
     saveControlData = () => {
@@ -149,9 +151,9 @@ class ControlPanel extends Component {
     render() {
         const {data} = this.state;
         let {dataPoint} = this.props;
-
+        console.log('key', gpsData.key);
         return (
-            <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data}/>
+            <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data} myId={gpsData.key}/>
         )
 
 

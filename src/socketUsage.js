@@ -17,4 +17,8 @@ export let emitOSC = (address, value)=> {
     });
 }
 
+export let receiveOSC = (func) => {
+    socket.on('osc', func);
+}
+
 export {isSocketConnect};
