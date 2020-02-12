@@ -137,9 +137,10 @@ class ControlPanel extends Component {
             localStorage.setItem(SESSION_ID,myId)
             localStorage.setItem(SESSION_TIME, Date.now())
         }
-            
+        
         gpsData.key = myId;
         gpsData.showId = getShowId(myId);
+        this.setState({data: {...this.state.data, centerName: gpsData.showId}});
     }
     
     
