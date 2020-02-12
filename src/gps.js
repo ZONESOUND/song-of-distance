@@ -6,7 +6,7 @@ export let setupGPS = () => {
 export let gpsHelp = getSettingStr();
 
 function showPosition(position) {
-    console.log('yo!');
+    //console.log('yo!');
     gpsPermission = true;
     gpsData = {
         lat: position.coords.latitude,
@@ -18,7 +18,7 @@ function showPosition(position) {
 }
     
 function watchPositionError(positionError)  {
-    console.log('fail!'+gpsHelp);
+    //console.log('fail!'+gpsHelp);
     gpsPermission = false;
     switch (positionError.code) {
         // PERMISSION_DENIED

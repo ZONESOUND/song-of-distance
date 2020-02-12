@@ -12,9 +12,8 @@ export default function sketch (p) {
     let myId;
 
     receiveOSC((data)=>{
-        if (data.address=="/gps/trigger"){
+        if (data.address == '/gps/trigger'){
             let scanId = JSON.parse(data.args[0].value).id
-            // console.log(scanId)
             if (scanId == myId){
                 lightCounter = 0;
             }
@@ -37,10 +36,12 @@ export default function sketch (p) {
         }
         if (props.dataPoint && Object.keys(configData).length !== 0){
             allDataPoint = props.dataPoint;
+            allDataPoint.forEach(e => {
+                if (!e) console.log('sth wrong?');
+            })
             updateDataPoint();
         }
         if (props.myId) {
-            console.log(props.myId);
             myId = props.myId;
         }
     };
@@ -70,8 +71,8 @@ export default function sketch (p) {
         radioDeg = calcDeg(configData.radioSpeed, p.frameCount);
 
         //emit radio
-        if (p.frameCount % 30 === 0)
-            emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
+        // if (p.frameCount % 30 === 0)
+        //     emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
 
         lightCounter++;
         p.background(255/lightCounter, 100);
@@ -206,7 +207,7 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg) {
                     time_to_now_second: timeDelta,
                 })
                 
-                emitOSC('/gps/trigger', d);
+                //emitOSC('/gps/trigger', d);
             }
             lastTrigger = e;
         }

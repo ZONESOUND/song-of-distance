@@ -37,8 +37,12 @@ class LocData extends Component {
         
         this.checkData();
         this.setState({
-            dataPoint: Object.entries(this.state.allLocations).map(d => 
-                ({...d[1], key: d[0]}))
+            dataPoint: Object.entries(this.state.allLocations).filter((d) => {
+                return d[0] != gpsData.key && d[0];
+            }).map((d) => {
+                return ({...d[1], key: d[0]});
+            })
+                
         })
         
     }
@@ -97,12 +101,11 @@ class ControlPanel extends Component {
     }
 
     
-
     componentDidMount() {
-        this.addGPSKey();
+        let data = this.addGPSKey();
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
-        let {data, GUI} = this.state;
+        let {GUI} = this.state;
         //if (dataStore) {
         // data = JSON.parse(dataStore);
         //     this.setState({
@@ -126,7 +129,7 @@ class ControlPanel extends Component {
         let myId;
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
-        if (lastId && (Date.now() - lastIdTime < 60*1000)){
+        if (lastId && (Date.now() - lastIdTime < 60*60*1000)){
             console.log("Old Id Detected! use " + lastId)
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
@@ -140,9 +143,18 @@ class ControlPanel extends Component {
         
         gpsData.key = myId;
         gpsData.showId = getShowId(myId);
-        this.setState({data: {...this.state.data, centerName: gpsData.showId}});
+        let tempData = {...this.state.data, centerName: gpsData.showId,
+            //lat: gpsData.lat+Math.random(),
+            //lon: gpsData.lon+Math.random(),
+        }
+        this.setState({data: tempData});
+
+        gpsData.leave = false
+        //console.log(gpsData);
+        earthLocRef.child(myId).set(gpsData);
+        
+        return tempData;
     }
-    
     
     saveControlData = () => {
         let {data} = this.state;
@@ -152,7 +164,6 @@ class ControlPanel extends Component {
     render() {
         const {data} = this.state;
         let {dataPoint} = this.props;
-        console.log('key', gpsData.key);
         return (
             <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data} myId={gpsData.key}/>
         )
