@@ -1,5 +1,7 @@
 import Tone from 'tone';
-let octave = 'CDEFGAB';
+let octave = 'BCDEFGA'; //start from index 1 so put C at second 
+let octaveStart = 3;
+let octaveMax = 6;
 let synth;
 export let initSound = () => {
     synth = new Tone.Synth({
@@ -13,5 +15,6 @@ export let initSound = () => {
 }
 
 export let triggerSound = (d) => {
-    synth.triggerAttackRelease('C4', '8n');
+    synth.triggerAttackRelease(octave[d.layer%7]+
+        Math.min(octaveMax, Math.floor(octaveStart+d.layer/7)), '16n');
 }

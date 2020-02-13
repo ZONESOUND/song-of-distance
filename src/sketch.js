@@ -10,6 +10,7 @@ export default function sketch (p) {
     let configData = {};
     let enableUpdate = true;
     let lightCounter = 0;
+    let rDistArr = [];
     let myId;
     let testBtn;
 
@@ -28,11 +29,12 @@ export default function sketch (p) {
         p.frameRate(30);
         console.log('issocketConnect:' + isSocketConnect);
         initSound();
-        testBtn = p.createButton('yo');
-        testBtn.position(19, 19);
-        testBtn.mousePressed(()=>{
-            triggerSound();
-        })
+        // for test
+        // testBtn = p.createButton('yo');
+        // testBtn.position(19, 19);
+        // testBtn.mousePressed(()=>{
+        //     triggerSound();
+        // })
     };
 
     p.windowResized = () =>  {
@@ -42,6 +44,7 @@ export default function sketch (p) {
     p.myCustomRedrawAccordingToNewPropsHandler = (props) => {
         if (props.configData) {
             configData = props.configData;
+            calcRdistArr();
         }
         if (props.dataPoint && Object.keys(configData).length !== 0){
             allDataPoint = props.dataPoint;
@@ -69,6 +72,12 @@ export default function sketch (p) {
         enableUpdate = num > allDataPoint.length ? false : true;
     }
 
+    let calcRdistArr = () => {
+        for (let i=0; i<50; i++) {
+            rDistArr[i] = calcR(i, configData.globalScale, configData.globalPow);
+        }
+    }
+
 
     p.draw = function () {
         if (p.frameCount % 25 === 0 && enableUpdate){
@@ -87,14 +96,13 @@ export default function sketch (p) {
         p.fill(255)
         p.stroke(255,10)
         p.strokeWeight(1)
-
+        
         let text = `Total Nodes: ${calcPerson(dataPoint)}\nActive: ${calcActive(dataPoint)}\nExecute Time: ${p.frameCount}\nScanning: ${(radioDeg/Math.PI*180).toFixed(2)}°`
         drawText(p, text);
         //將繪製點移動到畫布中央
         p.translate(p.width/2, p.height/2);
-
-        drawCircle(p, 250000, 0.58);
-        drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg);
+        drawCircle(p, rDistArr);
+        drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData);
         
         p.noFill()
         drawSwipeLine(p, radioDeg);
@@ -182,7 +190,7 @@ function drawSwipeLine(p, radioDeg) {
     p.pop()
 }
 
-function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg) {
+function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData) {
     p.textSize(12)
     p.fill(255)
     p.stroke(255,10)
@@ -204,16 +212,26 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg) {
         if (scanned){
             if (lastTrigger !== e){
                 //console.log(e);
-                let d = JSON.stringify({
+                // let d = JSON.stringify({
+                //     degree: e.degree,
+                //     dist: e.dist,
+                //     id: e.key,
+                //     data: e.data,
+                //     leave: e.leave,
+                //     timeStamp: e.timeStamp,
+                //     time_to_now_second: timeDelta,
+                // })
+               
+                let d = {  
+                    //layer: Math.ceil(Math.pow(e.dist/0.5, 1/configData.globalPow)*10/configData.globalScale),
+                    //layer: Math.ceil(Math.pow(e.dist/0.5, 1/configData.globalPow)*10/configData.globalScale),
+                    layer: calcReverseR(e.dist, configData.globalScale, configData.globalPow),
                     degree: e.degree,
                     dist: e.dist,
-                    id: e.key,
-                    data: e.data,
                     leave: e.leave,
-                    timeStamp: e.timeStamp,
-                    time_to_now_second: timeDelta,
-                })
-                
+                    pos: e.pos,
+                }
+                triggerSound(d);
                 //emitOSC('/gps/trigger', d);
             }
             lastTrigger = e;
@@ -279,12 +297,18 @@ function calcR(i, globalScale, globalPow) {
     return Math.pow(Math.abs(i * globalScale / 10), globalPow)*0.5;
 }
 
-function drawCircle(p, globalScale, globalPow) {
+function calcReverseR(dist, globalScale, globalPow) {
+  return Math.ceil(Math.pow(dist/0.25, 1/globalPow)*10/globalScale);
+}
+
+function drawCircle(p, rDistArr) {
     let frameCount = p.frameCount;
     p.noFill();
     for(let i=0;i<50;i++){
         //let r = Math.pow(Math.abs(i * globalScale / 10), globalPow) * 0.5
-        let r = calcR(i, globalScale, globalPow);
+        let r = 0;
+        if (rDistArr.length > i) r = rDistArr[i];
+        //else r = calcR(i, globalScale, globalPow);
         p.stroke(255, Math.max(60-i/10*60,4) + Math.sin(-frameCount/10+i)*4)
         if (i<9){
             p.fill(255,255,255,1 + p.noise(frameCount/10,i)*1)
