@@ -1,9 +1,17 @@
 import Tone from 'tone';
-let osc;
+let octave = 'CDEFGAB';
+let synth;
 export let initSound = () => {
-    osc = new Tone.Oscillator().toMaster();
+    synth = new Tone.Synth({
+        oscillator : {type:'sine'} ,
+        envelope : {
+            attack: 0.1 ,
+            decay: 0.1 ,
+            sustain: 0.2 ,
+            release: 0.5
+        }}).toMaster();
 }
 
-export let triggerSound = () => {
-    osc.triggerAttackRelease('C4', '8n', 0)
+export let triggerSound = (d) => {
+    synth.triggerAttackRelease('C4', '8n');
 }

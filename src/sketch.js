@@ -1,4 +1,5 @@
 import {receiveOSC, emitOSC, isSocketConnect} from './socketUsage';
+import {initSound, triggerSound} from './sound';
 //import {earthLocRef} from './firebase';
 
 export default function sketch (p) {
@@ -10,6 +11,7 @@ export default function sketch (p) {
     let enableUpdate = true;
     let lightCounter = 0;
     let myId;
+    let testBtn;
 
     receiveOSC((data)=>{
         if (data.address=="/gps/trigger"){
@@ -25,6 +27,12 @@ export default function sketch (p) {
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.frameRate(30);
         console.log('issocketConnect:' + isSocketConnect);
+        initSound();
+        testBtn = p.createButton('yo');
+        testBtn.position(19, 19);
+        testBtn.mousePressed(()=>{
+            triggerSound();
+        })
     };
 
     p.windowResized = () =>  {
@@ -267,12 +275,16 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg) {
       })
 }
 
+function calcR(i, globalScale, globalPow) {
+    return Math.pow(Math.abs(i * globalScale / 10), globalPow)*0.5;
+}
 
 function drawCircle(p, globalScale, globalPow) {
     let frameCount = p.frameCount;
     p.noFill();
     for(let i=0;i<50;i++){
-        let r = Math.pow(Math.abs(i * globalScale / 10), globalPow) * 0.5
+        //let r = Math.pow(Math.abs(i * globalScale / 10), globalPow) * 0.5
+        let r = calcR(i, globalScale, globalPow);
         p.stroke(255, Math.max(60-i/10*60,4) + Math.sin(-frameCount/10+i)*4)
         if (i<9){
             p.fill(255,255,255,1 + p.noise(frameCount/10,i)*1)
