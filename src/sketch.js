@@ -70,8 +70,8 @@ export default function sketch (p) {
         radioDeg = calcDeg(configData.radioSpeed, p.frameCount);
 
         //emit radio
-        if (p.frameCount % 30 === 0)
-            emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
+        // if (p.frameCount % 30 === 0)
+        //     emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
 
         lightCounter++;
         p.background(255/lightCounter, 100);
@@ -206,7 +206,7 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg) {
                     time_to_now_second: timeDelta,
                 })
                 
-                emitOSC('/gps/trigger', d);
+                //emitOSC('/gps/trigger', d);
             }
             lastTrigger = e;
         }
