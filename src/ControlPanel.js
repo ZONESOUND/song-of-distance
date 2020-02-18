@@ -4,6 +4,7 @@ import sketch from './sketch';
 import {earthLocRef} from './firebase';
 import * as dat from 'dat.gui';
 import {gpsPermission, gpsData, setupGPS} from './gps';
+import {NameModal} from './NameModal';
 
 const SESSION_ID = 'generative_geo_id';
 const SESSION_TIME = 'generative_geo_id_time';
@@ -96,8 +97,6 @@ class ControlPanel extends Component {
         GUI: new dat.GUI()
     }
 
-    
-
     componentDidMount() {
         this.addGPSKey();
         //let dataStore = sessionStorage.getItem('controlData');
@@ -140,6 +139,7 @@ class ControlPanel extends Component {
             
         gpsData.key = myId;
         gpsData.showId = getShowId(myId);
+        this.setState({data:{...this.state.data, centerName: gpsData.showId}})
     }
     
     
@@ -153,7 +153,11 @@ class ControlPanel extends Component {
         let {dataPoint} = this.props;
         console.log('key', gpsData.key);
         return (
+            <>
+            <NameModal show={true} name={data.centerName} 
+                        onChange={n => this.setState({data:{...data, centerName: n}})}/>
             <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data} myId={gpsData.key}/>
+            </>
         )
 
 
