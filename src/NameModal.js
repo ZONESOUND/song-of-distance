@@ -28,14 +28,14 @@ export function NameModal(props) {
                 dialogClassName={'name-modal-dialog'}
                 backdropClassName={'name-modal-backdrop'}>
             <Modal.Body bsPrefix={'name-modal-body'}>
-                <label htmlFor="name">What's your name?</label> <br/>
+                <label htmlFor="name">Name your session</label> <br/>
                 <input id="name" type="text" placeholder={props.name} 
                     value={name} onChange={e => setName(e.target.value)}></input>
                 
             </Modal.Body>
             <Modal.Footer bsPrefix={'name-modal-footer'}>
                 <Button variant="dark" size="sm" onClick={handleClose}>
-                    Cancel
+                    Default
                 </Button>
                 <Button variant="light" size="sm" onClick={handleClose}>
                     Save

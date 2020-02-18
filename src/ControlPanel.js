@@ -7,6 +7,7 @@ import {gpsPermission, gpsData, setupGPS} from './gps';
 import {NameModal} from './NameModal';
 
 const SESSION_ID = 'generative_geo_id';
+const SESSION_NAME = 'generative_name';
 const SESSION_TIME = 'generative_geo_id_time';
 
 class LocData extends Component {
@@ -125,23 +126,32 @@ class ControlPanel extends Component {
         let myId;
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
+        let showId = localStorage.getItem(SESSION_NAME)
         if (lastId && (Date.now() - lastIdTime < 60*1000)){
             console.log("Old Id Detected! use " + lastId)
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
         } else{
             myId = earthLocRef.push().key;
-            
+            showId = getShowId(myId);
             console.log("Generate new id " + myId)
             localStorage.setItem(SESSION_ID,myId)
             localStorage.setItem(SESSION_TIME, Date.now())
         }
-            
+        
         gpsData.key = myId;
-        gpsData.showId = getShowId(myId);
-        this.setState({data:{...this.state.data, centerName: gpsData.showId}})
+        console.log('showID: ', showId);
+        if (!showId)
+            showId = getShowId(myId);
+        gpsData.showId = showId;
+        this.changeCenterName(showId);
     }
-    
+
+    changeCenterName = (name) => {
+        console.log('set:',name);
+        localStorage.setItem(SESSION_NAME, name);
+        this.setState({data:{...this.state.data, centerName: name}})
+    }
     
     saveControlData = () => {
         let {data} = this.state;
@@ -155,7 +165,7 @@ class ControlPanel extends Component {
         return (
             <>
             <NameModal show={true} name={data.centerName} 
-                        onChange={n => this.setState({data:{...data, centerName: n}})}/>
+                        onChange={this.changeCenterName}/>
             <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data} myId={gpsData.key}/>
             </>
         )
