@@ -41,7 +41,9 @@ class LocData extends Component {
         //this.checkData(allLocations);
         this.setState({
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
-            dataPoint: Object.entries(allLocations).map(d => 
+            dataPoint: Object.entries(allLocations)
+            .filter(d=> d[0] !== gpsData.key)
+            .map(d => 
                 ({...d[1], key: d[0]}))
         })
         
