@@ -2,7 +2,7 @@
   "name": "gps-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://zonesound.github.io/song-of-distance-swipe",
+  "homepage": "http://zonesound.github.io/song-of-distance",
   "dependencies": {
     "bootstrap": "^4.4.1",
     "dat.gui": "^0.7.6",

@@ -12,13 +12,14 @@ function showPosition(position) {
         lat: position.coords.latitude,
         lon: position.coords.longitude,
         timeStamp: Date.now(),
-        date: Date(Date.now())
+        date: Date(Date.now()),
+        leave: false
     }
-    //earthLocationRefs.child(myId).set(gp);
 }
     
 function watchPositionError(positionError)  {
-    console.log('fail!'+gpsHelp);
+   
+  console.log('fail!'+gpsHelp);
     gpsPermission = false;
     switch (positionError.code) {
         // PERMISSION_DENIED

@@ -19,14 +19,15 @@ class LocData extends Component {
 
     componentDidMount() {
         //this.initGPS();
+        console.log('setupGPS');
         setupGPS();
         earthLocRef.on('value', (snapshot) => {
             //console.log(snapshot.val());
-            this.setState({
-                allLocations: snapshot.val()
-            });
+            // this.setState({
+            //     allLocations: snapshot.val()
+            // });
             //getAll();
-            this.updateDataSet();
+            this.updateDataSet(snapshot.val());
         });
     }
 
@@ -34,20 +35,21 @@ class LocData extends Component {
         
     }
 
-    updateDataSet = () => {
+    updateDataSet = (allLocations) => {
         console.log('updateDataset');
         
-        this.checkData();
+        //this.checkData(allLocations);
         this.setState({
-            dataPoint: Object.entries(this.state.allLocations).map(d => 
+            // dataPoint: Object.entries(this.state.allLocations).map(d => 
+            dataPoint: Object.entries(allLocations).map(d => 
                 ({...d[1], key: d[0]}))
         })
         
     }
 
-    checkData = () => {
+    checkData = (allLocations) => {
         //should be removed....
-        Object.entries(this.state.allLocations).forEach((e)=>{
+        Object.entries(allLocations).forEach((e)=>{
             //如果沒有 key 補上
             if (!('key' in e[1])) {
                 earthLocRef.child(e[0]).child('key').set(e[0]);
@@ -132,7 +134,7 @@ class ControlPanel extends Component {
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
         } else{
-            myId = earthLocRef.push().key;
+            myId = earthLocRef.push(gpsData).key;
             showId = getShowId(myId);
             console.log("Generate new id " + myId)
             localStorage.setItem(SESSION_ID,myId)
@@ -140,16 +142,19 @@ class ControlPanel extends Component {
         }
         
         gpsData.key = myId;
-        console.log('showID: ', showId);
+
         if (!showId)
             showId = getShowId(myId);
         gpsData.showId = showId;
-        this.changeCenterName(showId);
+        earthLocRef.child(myId).set(gpsData);
+        this.changeCenterName(showId, false);
     }
 
-    changeCenterName = (name) => {
-        console.log('set:',name);
+    changeCenterName = (name, updateFirebase=true) => {
+
         localStorage.setItem(SESSION_NAME, name);
+        if (updateFirebase) 
+            earthLocRef.child(gpsData.key).child('showId').set(name);
         this.setState({data:{...this.state.data, centerName: name}})
     }
     
@@ -161,7 +166,7 @@ class ControlPanel extends Component {
     render() {
         const {data} = this.state;
         let {dataPoint} = this.props;
-        console.log('key', gpsData.key);
+
         return (
             <>
             <NameModal show={true} name={data.centerName} 

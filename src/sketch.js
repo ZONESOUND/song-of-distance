@@ -276,7 +276,7 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData) {
 
         if (!e.leave){
             p.fill(255,0,0)
-            p.text(this.uid, 0, 30)
+            //p.text(this.uid, 0, 30)
             useR= 5+ Math.sin(p.frameCount/10)*2
             p.push()
                 p.stroke(255,200)
@@ -365,6 +365,7 @@ function calcDeg(radioSpeed, frameCount) {
 }
 
 function getPos(p, configData, obj){
+
     if (obj.lon && obj.lat){
       let lon = (obj.lon-configData.lon)*configData.globalScale
       let lat = (obj.lat-configData.lat)*configData.globalScale
