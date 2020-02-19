@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/song-of-distance/static/css/main.f16c07df.chunk.css",
-    "main.js": "/song-of-distance/static/js/main.7a2aec82.chunk.js",
-    "main.js.map": "/song-of-distance/static/js/main.7a2aec82.chunk.js.map",
+    "main.js": "/song-of-distance/static/js/main.eebd8b4a.chunk.js",
+    "main.js.map": "/song-of-distance/static/js/main.eebd8b4a.chunk.js.map",
     "runtime-main.js": "/song-of-distance/static/js/runtime-main.3e03df9d.js",
     "runtime-main.js.map": "/song-of-distance/static/js/runtime-main.3e03df9d.js.map",
     "static/css/2.83ace7dd.chunk.css": "/song-of-distance/static/css/2.83ace7dd.chunk.css",
     "static/js/2.2d7733cd.chunk.js": "/song-of-distance/static/js/2.2d7733cd.chunk.js",
     "static/js/2.2d7733cd.chunk.js.map": "/song-of-distance/static/js/2.2d7733cd.chunk.js.map",
     "index.html": "/song-of-distance/index.html",
-    "precache-manifest.fc3a59db9efbd601d19df7dc0d50c496.js": "/song-of-distance/precache-manifest.fc3a59db9efbd601d19df7dc0d50c496.js",
+    "precache-manifest.e9b9ed08f561c438ca70bccf00bf2ca1.js": "/song-of-distance/precache-manifest.e9b9ed08f561c438ca70bccf00bf2ca1.js",
     "service-worker.js": "/song-of-distance/service-worker.js",
     "static/css/2.83ace7dd.chunk.css.map": "/song-of-distance/static/css/2.83ace7dd.chunk.css.map",
     "static/css/main.f16c07df.chunk.css.map": "/song-of-distance/static/css/main.f16c07df.chunk.css.map"
@@ -19,6 +19,6 @@
     "static/css/2.83ace7dd.chunk.css",
     "static/js/2.2d7733cd.chunk.js",
     "static/css/main.f16c07df.chunk.css",
-    "static/js/main.7a2aec82.chunk.js"
+    "static/js/main.eebd8b4a.chunk.js"
   ]
 }
