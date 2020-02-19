@@ -106,24 +106,24 @@ class ControlPanel extends Component {
         this.addGPSKey();
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
-        let {data, GUI} = this.state;
+        //let {data, GUI} = this.state;
         //if (dataStore) {
         // data = JSON.parse(dataStore);
         //     this.setState({
         //         data: data
         //     })
         //} 
-        const btn = {'add config': this.saveControlData};
-        GUI.add(data,"globalScale",1000,800000)
-        GUI.add(data,"globalPow",0,0.99)
-        GUI.add(data,"maxLineLength")
-        GUI.add(data,'radioSpeed',0,3,0.01)
-        GUI.add(data,'centerName')
-        GUI.add(data,'lat',-90,90,0.01)
-        GUI.add(data,'lon',-180,180,0.01)
-        GUI.add(btn, 'add config');
+        // const btn = {'add config': this.saveControlData};
+        // GUI.add(data,"globalScale",1000,800000)
+        // GUI.add(data,"globalPow",0,0.99)
+        // GUI.add(data,"maxLineLength")
+        // GUI.add(data,'radioSpeed',0,3,0.01)
+        // GUI.add(data,'centerName')
+        // GUI.add(data,'lat',-90,90,0.01)
+        // GUI.add(data,'lon',-180,180,0.01)
+        // GUI.add(btn, 'add config');
 
-        GUI.close()
+        // GUI.close()
     }
 
     addGPSKey = () => {
