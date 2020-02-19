@@ -103,6 +103,7 @@ class ControlPanel extends Component {
     }
 
     componentDidMount() {
+        window.addEventListener("beforeunload", this.handleWindowBeforeUnload);
         this.addGPSKey();
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
@@ -124,6 +125,10 @@ class ControlPanel extends Component {
         // GUI.add(btn, 'add config');
 
         // GUI.close()
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.handleWindowBeforeUnload);
     }
 
     addGPSKey = () => {
@@ -164,6 +169,11 @@ class ControlPanel extends Component {
     saveControlData = () => {
         let {data} = this.state;
         sessionStorage.setItem('controlData', JSON.stringify({...data}));
+    }
+
+    handleWindowBeforeUnload = (e) => {
+        earthLocRef.child(gpsData.key).child('leave').set(true);
+        return;
     }
 
     render() {
