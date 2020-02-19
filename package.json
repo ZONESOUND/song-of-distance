@@ -19,6 +19,7 @@
     "tone": "^13.8.25"
   },
   "scripts": {
+    "https": "HTTPS=true npm start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",

@@ -42,7 +42,8 @@ class LocData extends Component {
         this.setState({
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
             dataPoint: Object.entries(allLocations)
-            .filter(d=> d[0] !== gpsData.key)
+            .filter(d=> {
+                return d[0] !== gpsData.key})
             .map(d => 
                 ({...d[1], key: d[0]}))
         })
@@ -99,12 +100,15 @@ class ControlPanel extends Component {
             lon: gpsData.lon,
             centerName: 'center'
         }, 
+        name: 'center',
+        naming: false
         //GUI: new dat.GUI()
     }
 
     componentDidMount() {
         window.addEventListener("beforeunload", this.handleWindowBeforeUnload);
         this.addGPSKey();
+        this.setState({naming: true});
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
         //let {data, GUI} = this.state;
@@ -149,7 +153,7 @@ class ControlPanel extends Component {
         }
         
         gpsData.key = myId;
-
+        console.log(gpsData.key);
         if (!showId)
             showId = getShowId(myId);
         gpsData.showId = showId;
@@ -158,12 +162,10 @@ class ControlPanel extends Component {
     }
 
     changeCenterName = (name, updateFirebase) => {
-
         localStorage.setItem(SESSION_NAME, name);
-        //console.log(updateFirebase, name);
-        if (updateFirebase) 
+        if (updateFirebase && gpsData.key) 
             earthLocRef.child(gpsData.key).child('showId').set(name);
-        this.setState({data:{...this.state.data, centerName: name}})
+        this.setState({data:{...this.state.data, centerName: name}, name: name});
     }
     
     saveControlData = () => {
@@ -182,9 +184,10 @@ class ControlPanel extends Component {
 
         return (
             <>
-            <NameModal show={true} name={data.centerName} 
+            <NameModal show={this.state.naming} name={data.centerName} 
                         onChange={this.changeCenterName}/>
-            <P5Wrapper sketch={sketch} dataPoint={dataPoint} configData={data} myId={gpsData.key}/>
+            <P5Wrapper sketch={sketch} dataPoint={dataPoint}
+                    configData={data} myId={gpsData.key}/>
             </>
         )
 

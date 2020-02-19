@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
@@ -13,9 +13,10 @@ export function NameModal(props) {
         if (name !== "")
             props.onChange(name, true);
     }
-    const handleShow = () => {
-        setShow(true);
-    }
+    useEffect(()=>{
+        if (props.show)
+            setShow(true);
+    },[props.show]);
   
     return (
       <>
