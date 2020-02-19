@@ -129,7 +129,7 @@ class ControlPanel extends Component {
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
         let showId = localStorage.getItem(SESSION_NAME)
-        if (lastId && (Date.now() - lastIdTime < 60*1000)){
+        if (lastId && (Date.now() - lastIdTime < 60*60*1000)){
             console.log("Old Id Detected! use " + lastId)
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
@@ -150,9 +150,10 @@ class ControlPanel extends Component {
         this.changeCenterName(showId, false);
     }
 
-    changeCenterName = (name, updateFirebase=true) => {
+    changeCenterName = (name, updateFirebase) => {
 
         localStorage.setItem(SESSION_NAME, name);
+        //console.log(updateFirebase, name);
         if (updateFirebase) 
             earthLocRef.child(gpsData.key).child('showId').set(name);
         this.setState({data:{...this.state.data, centerName: name}})

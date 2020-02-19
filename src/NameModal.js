@@ -11,7 +11,7 @@ export function NameModal(props) {
     const handleClose = () => {
         setShow(false);
         if (name !== "")
-            props.onChange(name);
+            props.onChange(name, true);
     }
     const handleShow = () => {
         setShow(true);
