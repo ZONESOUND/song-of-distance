@@ -99,7 +99,7 @@ class ControlPanel extends Component {
             lon: gpsData.lon,
             centerName: 'center'
         }, 
-        GUI: new dat.GUI()
+        //GUI: new dat.GUI()
     }
 
     componentDidMount() {
