@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './NameModal.css';
+import './BlackModal.css';
 
 export function NameModal(props) {
     const [show, setShow] = useState(props.show);
@@ -26,15 +26,15 @@ export function NameModal(props) {
   
         <Modal show={show} 
                 centered={true}
-                dialogClassName={'name-modal-dialog'}
-                backdropClassName={'name-modal-backdrop'}>
-            <Modal.Body bsPrefix={'name-modal-body'}>
+                dialogClassName={'black-modal-dialog'}
+                backdropClassName={'black-modal-backdrop'}>
+            <Modal.Body bsPrefix={'black-modal-body'}>
                 <label htmlFor="name">Name your session</label> <br/>
                 <input id="name" type="text" placeholder={props.name} 
                     value={name} onChange={e => setName(e.target.value)}></input>
                 
             </Modal.Body>
-            <Modal.Footer bsPrefix={'name-modal-footer'}>
+            <Modal.Footer bsPrefix={'black-modal-footer'}>
                 <Button variant="dark" size="sm" onClick={handleClose}>
                     Default
                 </Button>

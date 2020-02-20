@@ -5,6 +5,7 @@ import {earthLocRef} from './firebase';
 import * as dat from 'dat.gui';
 import {gpsPermission, gpsData, setupGPS} from './gps';
 import {NameModal} from './NameModal';
+import {IntroModal} from './IntroModal';
 
 const SESSION_ID = 'generative_geo_id';
 const SESSION_NAME = 'generative_name';
@@ -13,7 +14,7 @@ const SESSION_TIME = 'generative_geo_id_time';
 class LocData extends Component {
     state = {
         gp: {},
-        allLocations: [],
+        //allLocations: [],
         dataPoint: []
     }
 
@@ -83,6 +84,7 @@ class LocData extends Component {
 
     render() {
         return (<>
+            <IntroModal show={false}/>
             {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>}
             </>
         );

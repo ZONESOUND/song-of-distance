@@ -1,0 +1,70 @@
+/* modal */
+.black-modal-header {
+    color: white;
+    padding: 5px;
+}
+.black-modal-header button {
+    color: white;
+}
+
+.black-modal-backdrop {
+    background: rgba(255,255,255,0.4);
+}
+.black-modal-dialog .modal-content {
+    border: solid 1px white;
+    background-color: black;
+}
+
+.black-modal-body {
+    padding: 20px 20px;
+    color: white;
+}
+.black-modal-footer {
+    padding: 0px 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.black-modal-footer button{
+    margin-left: 5px;
+    margin-right: 5px;   
+}
+
+.black-modal-body input {
+    margin-top: 5px;
+    padding: 0.5em;
+    background: black;
+    color: white;
+    width: 100%;
+    border-radius: 10px;
+    border: solid 1px gray;
+    /* line-height: 2; */
+}
+
+.black-modal-body input:focus {
+    outline: none !important;
+    border: solid 1px white;
+}
+
+.intro-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+    padding: 3px 0px;
+    text-align: center;
+    /* font-weight: bold; */
+    line-height: 1.42857;
+    border-radius: 50%;
+    background: white;
+    /* color: white; */
+    border: 2px solid white;
+}
+
+.intro-button:focus {
+    outline: none !important;
+    border: solid 1px white;
+}
