@@ -2,6 +2,7 @@
 .black-modal-header {
     color: white;
     padding: 5px;
+    padding-right: 10px;
 }
 .black-modal-header button {
     color: white;
@@ -67,4 +68,26 @@
 .intro-button:focus {
     outline: none !important;
     border: solid 1px white;
+}
+
+.black-modal-body li {
+    padding-top: 1em;
+    line-height: 1.2;
+}
+
+.zh-tw-hint {
+    line-height: 1;
+    display: flex;
+    align-items:center;
+    margin: 0;
+}
+.zh-tw-hint img {
+    padding:0;
+    margin: 0.2em;
+    top: 0;
+    height: 1em;
+}
+.eng-hint {
+    font-size: 0.8em;
+    color: rgb(223, 222, 222);
 }

@@ -6,6 +6,7 @@ import * as dat from 'dat.gui';
 import {gpsPermission, gpsData, setupGPS} from './gps';
 import {NameModal} from './NameModal';
 import {IntroModal} from './IntroModal';
+import { LocHintModal } from './LocHintModal';
 
 const SESSION_ID = 'generative_geo_id';
 const SESSION_NAME = 'generative_name';
@@ -15,7 +16,7 @@ class LocData extends Component {
     state = {
         gp: {},
         //allLocations: [],
-        dataPoint: []
+        dataPoint: [],
     }
 
     componentDidMount() {
@@ -84,8 +85,9 @@ class LocData extends Component {
 
     render() {
         return (<>
+            <LocHintModal show={true}/>
             <IntroModal show={false}/>
-            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>}
+            {/* {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>} */}
             </>
         );
     }
