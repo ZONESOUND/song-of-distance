@@ -1,4 +1,4 @@
-export let gpsPermission = false;
+export let gpsPermission = null;
 export let gpsData = {};
 export let setupGPS = () => {
     navigator.geolocation.watchPosition(showPosition, watchPositionError);
@@ -19,22 +19,24 @@ function showPosition(position) {
     
 function watchPositionError(positionError)  {
    
-  console.log('fail!'+gpsHelp);
+    console.log('fail!'+gpsHelp);
     gpsPermission = false;
     switch (positionError.code) {
         // PERMISSION_DENIED
         case 1:
-        console.log('Permission denied')
-        break
+          console.log('Permission denied')
+          break
         // POSITION_UNAVAILABLE
         case 2:
-        console.log('Permission allowed, location disabled')
-        break
+          console.log('Permission allowed, location disabled')
+          break
         // TIMEOUT
         case 3:
-        console.log('Permission allowed, timeout reached')
-        break
-        }
+          console.log('Permission allowed, timeout reached')
+          break
+        default:
+          break;
+    }
 }
 
 function getSettingStr() {
