@@ -24,3 +24,9 @@ let getNote = (number) => {
     return octave[number%len]+
         Math.min(octaveMax, Math.floor(octaveStart+number/len));
 }
+
+export let makesound = () => {
+    let temp = new Tone.Synth().toMaster();
+    temp.volume.value = -60;
+    temp.triggerAttackRelease('C4', '16n');
+}

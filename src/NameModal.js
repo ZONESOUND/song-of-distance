@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-
+import {makesound} from './sound';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './BlackModal.css';
 
@@ -9,6 +9,7 @@ export function NameModal(props) {
     const [show, setShow] = useState(props.show);
     const [name, setName] = useState("");
     const handleClose = () => {
+        makesound();
         setShow(false);
         if (name !== "")
             props.onChange(name, true);
