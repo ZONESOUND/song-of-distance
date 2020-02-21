@@ -16,7 +16,7 @@ class LocData extends Component {
     state = {
         gp: {},
         //allLocations: [],
-        dataPoint: [],
+        dataPoint: []
     }
 
     componentDidMount() {
@@ -188,8 +188,8 @@ class ControlPanel extends Component {
 
         return (
             <>
-            <NameModal show={this.state.naming} name={data.centerName} 
-                        onChange={this.changeCenterName}/>
+            {/* <NameModal show={this.state.naming} name={data.centerName} 
+                        onChange={this.changeCenterName}/> */}
             <P5Wrapper sketch={sketch} dataPoint={dataPoint}
                     configData={data} myId={gpsData.key}/>
             </>
