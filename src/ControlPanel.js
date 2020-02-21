@@ -85,9 +85,9 @@ class LocData extends Component {
 
     render() {
         return (<>
-            <LocHintModal show={true}/>
+            <LocHintModal show={!gpsPermission}/>
             <IntroModal show={false}/>
-            {/* {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>} */}
+            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>}
             </>
         );
     }

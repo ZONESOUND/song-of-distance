@@ -33,7 +33,7 @@
 }
 
 .black-modal-body input {
-    margin-top: 5px;
+    margin: 5px 0;
     padding: 0.5em;
     background: black;
     color: white;
@@ -73,6 +73,12 @@
 .black-modal-body li {
     padding-top: 1em;
     line-height: 1.2;
+}
+
+.hint {
+    padding-left: 3px;
+    font-size: 0.9em;
+    color:gray;
 }
 
 .zh-tw-hint {

@@ -1,22 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './BlackModal.css';
 import setting from './img/Settings-icon.png';
-
-function getSettingStr() {
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      if (/android|windows phone/i.test(userAgent)) {
-        return "1. Open the Chrome app.\n\n2. Find and tap Settings.\n\n3. Tap Site settings > Location.\n\n4. Turn Location on.";
-      }
-      // iOS detection from: http://stackoverflow.com/a/9039885/177710
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return "1. Open the settings app.\n\n2. Find and tap Safari/Chrome.\n\n3. Tap Location.\n\n4. Select \"While Using the App\".";
-      }
-      return "Enable Location Permission";
-}
 
 export function LocHintModal(props) {
     const [show, setShow] = useState(props.show);
@@ -32,13 +19,10 @@ export function LocHintModal(props) {
         return 2;
     })
 
-    const handleClose = () => {
-        setShow(false);
-    }
-    const handleShow = () => {
-        setShow(true);
-    }
-  
+    useEffect(()=>{
+        setShow(props.show);
+    },[props.show]);
+
     return (
       <>  
         <Modal show={show}
@@ -50,8 +34,8 @@ export function LocHintModal(props) {
             </Modal.Header>
             <Modal.Body bsPrefix={'black-modal-body'}>
                 <h6>
-                <span class="zh-tw-hint">為了作品的完整呈現，請允許使用定位功能</span>
-                <span class="eng-hint">Enable location permission for the best experience.</span>
+                <span className="zh-tw-hint">為了作品的完整呈現，請允許使用定位功能</span>
+                <span className="eng-hint">Enable location permission for the best experience.</span>
                 </h6>
                 {os===0 && <IOSHint/>}  
                 {os===1 && <AndroidHint/>}   

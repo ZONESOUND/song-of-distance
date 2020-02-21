@@ -32,8 +32,7 @@ export function NameModal(props) {
                 <label htmlFor="name">Name your session</label> <br/>
                 <input id="name" type="text" placeholder={props.name} 
                     value={name} onChange={e => setName(e.target.value)}></input>
-                
-            </Modal.Body>
+                <span className="hint"> ⚠ 完整呈現作品，請打開聲音及定位。</span>           </Modal.Body>
             <Modal.Footer bsPrefix={'black-modal-footer'}>
                 <Button variant="dark" size="sm" onClick={handleClose}>
                     Default
