@@ -298,7 +298,8 @@ function calcR(i, globalScale, globalPow) {
 }
 
 function calcReverseR(dist, globalScale, globalPow) {
-  return Math.ceil(Math.pow(dist/0.25, 1/globalPow)*10/globalScale);
+    return Math.pow(dist/0.25, 1/globalPow)*10/globalScale;
+  //return Math.ceil(Math.pow(dist/0.25, 1/globalPow)*10/globalScale);
 }
 
 function drawCircle(p, rDistArr) {
