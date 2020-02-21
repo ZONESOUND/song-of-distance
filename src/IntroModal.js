@@ -29,10 +29,8 @@ export function IntroModal(props) {
                 
             </Modal.Header>
             <Modal.Body bsPrefix={'black-modal-body'}>
-                <h6>作品介紹</h6>
-                <p>..............</p>  
-                <h6>使用說明</h6>
-                <p>..............</p>               
+                <h6>距離之歌<br/><span class='eng-hint'>Song of Distance</span></h6><br/>
+                <p>「距離之歌」是一件將使用者定位資料轉化為樂音的生成式音樂系統。系統將不斷掃描周圍所的連線裝置，同時也將您的裝置座標提供給其他裝置。</p>               
             </Modal.Body>
         </Modal>
       </>
