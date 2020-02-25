@@ -33,7 +33,7 @@ export default function sketch (p) {
         // testBtn = p.createButton('yo');
         // testBtn.position(19, 19);
         // testBtn.mousePressed(()=>{
-        //     triggerSound();
+        //     triggerSound({layer:30});
         // })
     };
 

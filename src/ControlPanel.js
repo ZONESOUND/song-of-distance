@@ -96,8 +96,8 @@ class LocData extends Component {
 class ControlPanel extends Component {
     state = {
         data: {
-            globalScale: 250000,
-            globalPow: 0.58,
+            globalScale: 500000,
+            globalPow: 0.5,
             maxLineLength: 100,
             radioSpeed: 0.8,
             lat: gpsData.lat,

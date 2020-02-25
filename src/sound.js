@@ -1,8 +1,10 @@
 import Tone from 'tone';
-let octave = 'EFGABCD'; //start from index 1 so put C at second 
-let octaveStart = 3;
+let octave = 'CDEFGAB'; //start from index 1 so put C at second 
+let octaveStart = 2;
 let octaveMax = 6;
 let synth, reverb, comp;
+let noteTimeout = {};
+let noteSynth = {};
 
 export let initSound = () => {
     comp = new Tone.Compressor(-30, 3).toMaster();    
@@ -12,6 +14,19 @@ export let initSound = () => {
         wet: 0.6,
     });
     reverb.generate();
+    for (let i=0; i<octave.length; i++) {
+        for (let j=octaveStart; j<=octaveMax; j++) {
+            noteSynth[octave[i]+j] = new Tone.Synth({
+                oscillator : {type:'sine'} ,
+                envelope : {
+                    attack: 0.1 ,
+                    decay: 5 ,
+                    sustain: 0.2 ,
+                    release: 0.5
+                }});
+            noteSynth[octave[i]+j].envelope.decayCurve = 'exponential';
+        }
+    }
     // synth = new Tone.Synth({
     //     oscillator : {type:'sine'} ,
     //     envelope : {
@@ -25,22 +40,34 @@ export let initSound = () => {
 
 export let triggerSound = (d) => {
     let layer = Math.ceil(d.layer);
-    let dis = layer - d.layer;
+    let dis = Math.max(0.5, layer - d.layer);
     let note = getNote(layer);
-    console.log(note);
-    let freq = Tone.Frequency(note).toFrequency()*0.8*dis;
+    if (noteTimeout[note]) {
+        clearTimeout(noteTimeout[note]);
+        setTimeout(()=>{setRelease(note)}, 150);
+        return;
+    }
     
+    let freq = Tone.Frequency(note).toFrequency()*0.8*dis;
+    console.log(note, freq);
     let filter = new Tone.Filter(freq, 'lowpass');
-    let synth2 = new Tone.Synth({
-        oscillator : {type:'sine'} ,
-        envelope : {
-            attack: 0.1 ,
-            decay: 0.1 ,
-            sustain: 0.2 ,
-            release: 0.5
-        }}).chain(filter, reverb, comp);
+    
+    // var fmSynth = new Tone.FMSynth().chain(filter, reverb, comp);
+    // fmSynth.triggerAttackRelease(note, 0.15);
+    console.log(noteSynth[note]);
 
-    synth2.triggerAttackRelease(note, '16n');
+    //let newSynth = noteSynth[note].chain(filter, reverb, comp);
+    //newSynth.triggerAttack(note);
+    (noteSynth[note].chain(filter, reverb, comp)).triggerAttack(note);
+    
+    noteTimeout[note] = setTimeout(()=>{
+        setRelease(note);
+    }, 150);
+}
+
+let setRelease = (note) => {
+    noteSynth[note].triggerRelease();
+    noteTimeout[note] = null;
 }
 
 let getNote = (number) => {
