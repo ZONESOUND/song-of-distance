@@ -1,7 +1,13 @@
 import Tone from 'tone';
+let mode = 1; 
 let octave = 'CDEFGAB'; //start from index 1 so put C at second 
 let octaveStart = 2;
 let octaveMax = 6;
+
+let startFreq = Tone.Frequency('C2').toFrequency();
+let noteBetween = 5;
+let noteNumber = 10;
+
 let noteDuration = 150;
 let synth, reverb, comp;
 let noteTimeout = {};
@@ -15,6 +21,7 @@ export let initSound = () => {
         wet: 0.6,
     }).connect(comp);
     reverb.generate();
+    if (mode === 0) noteNumber = octave.length*(octaveMax-octaveStart+1);
     initNote();
     // synth = new Tone.Synth({
     //     oscillator : {type:'sine'} ,
@@ -28,65 +35,103 @@ export let initSound = () => {
 }
 
 let initNote = () => {
-    for (let i=0; i<octave.length; i++) {
-        for (let j=octaveStart; j<=octaveMax; j++) {
-            noteSynth[octave[i]+j] = new Tone.Synth({
-                oscillator : {type:'sine'} ,
-                envelope : {
-                    attack: 0.1 ,
-                    decay: 5 ,
-                    sustain: 0.2 ,
-                    release: 0.5
-                }});
-            noteSynth[octave[i]+j].envelope.decayCurve = 'exponential';
-            // noteSynth[octave[i]+j] = new Tone.FMSynth({envelope:{
-            //     attack: 0.1 ,
-            //     decay: 5 ,
-            //     sustain: 0.2 ,
-            //     release: 0.5
-            // }});
-            // noteSynth[octave[i]+j].envelope.decayCurve = 'exponential';
-        }
+    for (let i=0; i<noteNumber; i++) {
+        genSineSynth(i);
+        //genFMSynth(i);
     }
+}
+
+let genSineSynth = (ind) => {
+    noteSynth[ind] = new Tone.Synth({
+        oscillator : {type:'sine'} ,
+        envelope : {
+            attack: 0.1 ,
+            decay: 5 ,
+            sustain: 0.2 ,
+            release: 0.5
+        }});
+    noteSynth[ind].envelope.decayCurve = 'exponential';
+}
+
+let genFMSynth = (ind) => {
+    noteSynth[ind] = new Tone.FMSynth({envelope:{
+        attack: 0.1 ,
+        decay: 5 ,
+        sustain: 0.2 ,
+        release: 0.5
+    }});
+    noteSynth[ind].envelope.decayCurve = 'exponential';
 }
 
 export let triggerSound = (d) => {
     let layer = Math.ceil(d.layer);
     let dis = Math.max(0.5, layer - d.layer);
-    let note = getNote(layer);
-    if (noteTimeout[note]) {
-        clearTimeout(noteTimeout[note]);
-        setTimeout(()=>{setRelease(note)}, noteDuration);
+    layer = scaleNumber(layer);
+    let note = 0;
+    let freq = 0;
+    switch (mode) {
+        case 0:
+            note = getNote(layer);
+            freq = Tone.Frequency(note).toFrequency()*0.8*dis;
+            break;
+        case 1:
+            note = getFreq(layer);
+            freq = note*0.8*dis;
+            break;
+    
+        default:
+            break;
+    }
+    //let note = getFreq(layer);
+    //let freq = note*0.8*dis;
+    
+    
+    if (noteTimeout[layer]) {
+        clearTimeout(noteTimeout[layer]);
+        setTimeout(()=>{setRelease(layer)}, noteDuration);
         return;
     }
     
-    let freq = Tone.Frequency(note).toFrequency()*0.8*dis;
-    console.log(note, freq);
+    
+    console.log(layer, note, freq);
     let filter = new Tone.Filter(freq, 'lowpass');
     
     // var fmSynth = new Tone.FMSynth().chain(filter, reverb, comp);
     // fmSynth.triggerAttackRelease(note, 0.15);
-    setAttackRelease(filter, note);
+    setAttackRelease(filter, layer, note);
 }
 
-let setAttackRelease = (filter, note) => {
+let setAttackRelease = (filter, ind, note) => {
     //(noteSynth[note].chain(filter, reverb, comp)).triggerAttack(note);
-    (noteSynth[note].chain(filter,reverb)).triggerAttack(note);
-    noteTimeout[note] = setTimeout(()=>{
-        setRelease(note);
+    (noteSynth[ind].chain(filter,reverb)).triggerAttack(note);
+    noteTimeout[ind] = setTimeout(()=>{
+        setRelease(ind);
     }, noteDuration);
 }
 
-let setRelease = (note) => {
-    noteSynth[note].triggerRelease();
-    noteTimeout[note] = null;
+let setRelease = (ind) => {
+    noteSynth[ind].triggerRelease();
+    noteTimeout[ind] = null;
+}
+
+let scaleNumber = (number) => {
+    number = Math.floor(Math.pow(number, 1/2)) - 1;
+    return Math.max(Math.min(number, noteNumber-1), 0);
+    //not sure if i need to use max(..,0);
 }
 
 let getNote = (number) => {
-    number = Math.floor(Math.pow(number, 1/1.4));
     let len = octave.length;
     return octave[number%len]+
         Math.min(octaveMax, Math.floor(octaveStart+number/len));
+}
+
+let getFreq = (number) => {
+    return calculateFreq(startFreq, number*noteBetween);
+}
+
+let calculateFreq = (freq, half) => {
+    return freq * Math.pow(2, half/12.0);
 }
 
 export let makesound = () => {
