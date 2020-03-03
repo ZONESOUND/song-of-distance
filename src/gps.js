@@ -1,7 +1,16 @@
-export let gpsPermission = null;
+let gpsPermission = null;
 export let gpsData = {};
-export let setupGPS = () => {
-    navigator.geolocation.watchPosition(showPosition, watchPositionError);
+let id;
+let watchCallBack = null;
+export let setupGPS = (callback) => {
+    watchCallBack = callback;
+    console.log('setup gps');
+    let options = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    id = navigator.geolocation.watchPosition(showPosition, watchPositionError, options);
 }
 export let gpsHelp = getSettingStr();
 
@@ -15,6 +24,7 @@ function showPosition(position) {
         date: Date(Date.now()),
         leave: false
     }
+    watchCallBack(true);
 }
     
 function watchPositionError(positionError)  {
@@ -37,6 +47,7 @@ function watchPositionError(positionError)  {
         default:
           break;
     }
+    watchCallBack(false);
 }
 
 function getSettingStr() {
@@ -49,4 +60,8 @@ function getSettingStr() {
       return "1. Open the settings app.\n\n2. Find and tap Safari/Chrome.\n\n3. Tap Location.\n\n4. Select \"While Using the App\".";
     }
     return "Enable Location Permission";
+}
+
+export let clearWatchGPS = () => {
+  navigator.geolocation.clearWatch(id);
 }

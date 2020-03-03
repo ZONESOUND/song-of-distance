@@ -3,7 +3,7 @@ import P5Wrapper from 'react-p5-wrapper';
 import sketch from './sketch';
 import {earthLocRef} from './firebase';
 import * as dat from 'dat.gui';
-import {gpsPermission, gpsData, setupGPS} from './gps';
+import {gpsData, setupGPS} from './gps';
 import {NameModal} from './NameModal';
 import {IntroModal} from './IntroModal';
 import { LocHintModal } from './LocHintModal';
@@ -15,14 +15,18 @@ const SESSION_TIME = 'generative_geo_id_time';
 class LocData extends Component {
     state = {
         gp: {},
+        gpsPermission: null,
         //allLocations: [],
         dataPoint: []
+    }
+    gpsPermit = (b) => {
+        this.setState({gpsPermission: b});
     }
 
     componentDidMount() {
         //this.initGPS();
         console.log('setupGPS');
-        setupGPS();
+        setupGPS(this.gpsPermit);
         earthLocRef.on('value', (snapshot) => {
             //console.log(snapshot.val());
             // this.setState({
@@ -83,7 +87,10 @@ class LocData extends Component {
         })
     }
 
+     
+
     render() {
+        let {gpsPermission} = this.state;
         return (<>
             <LocHintModal show={gpsPermission===false}/>
             <IntroModal show={false}/>
