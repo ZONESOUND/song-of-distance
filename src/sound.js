@@ -211,7 +211,7 @@ let setRelease = (ind) => {
 }
 
 let scaleNumber = (number) => {
-    number = Math.floor(Math.pow(number, 1/1.8)) - 1;
+    number = Math.floor(Math.pow(number, 1/1.2)) - 1;
     return Math.max(Math.min(number, noteNumber-1), 0);
     //not sure if i need to use max(..,0);
 }

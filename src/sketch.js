@@ -67,7 +67,8 @@ export default function sketch (p) {
         console.log('updateDataPoint');
         let num = p.int(p.frameCount / 4);
         if (num) {
-            dataPoint = allDataPoint.map(dataPointMap).slice(-num);
+            let threshold = calcR(10, configData.globalScale, configData.globalPow);
+            dataPoint = allDataPoint.slice(-num).map(dataPointMap).filter((e) => e.dist < threshold);
         }
         enableUpdate = num > allDataPoint.length ? false : true;
     }
