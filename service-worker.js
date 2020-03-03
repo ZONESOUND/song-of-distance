@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/song-of-distance/precache-manifest.acf3b2eedd8a176010d82222b7b9cebc.js"
+  "/song-of-distance/precache-manifest.0718c4de6e51c78b0c8e35fa7ce5195f.js"
 );
 
 self.addEventListener('message', (event) => {
