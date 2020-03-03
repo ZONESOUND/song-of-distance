@@ -30,11 +30,11 @@ export default function sketch (p) {
         console.log('issocketConnect:' + isSocketConnect);
         initSound();
         // for test
-        // testBtn = p.createButton('yo');
-        // testBtn.position(19, 19);
-        // testBtn.mousePressed(()=>{
-        //     triggerSound({layer:30});
-        // })
+        testBtn = p.createButton('yo');
+        testBtn.position(19, 19);
+        testBtn.mousePressed(()=>{
+            triggerSound({layer:30, leave: false});
+        })
     };
 
     p.windowResized = () =>  {
