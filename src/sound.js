@@ -5,8 +5,8 @@ import C2 from './sound/C2_low_short_44.1k.mp3';
 let mode = 3; 
 //let octave = 'CDEFGAB'; //start from index 1 so put C at second 
 let octave = ['C', 'D', 'Eb', 'F', 'G', 'A', 'Bb'];
-let octaveStart = 3;
-let octaveMax = 6;
+let octaveStart = 2;
+let octaveMax = 5;
 
 let startFreq = Tone.Frequency('F3').toFrequency();
 let noteBetween = 5;
@@ -15,10 +15,11 @@ let noteNumber = 9;
 let layerInner = 2;
 let layerOuter = 15;
 
-let noteDuration = 300;
+let noteDuration = 200;
 let synth, reverb, comp, samplerLong, samplerShort, finalFilter;
 let noteTimeout = {};
 let noteSynth = {};
+let notePlaying = {};
 
 export let initSound = () => {
     var limiter = new Tone.Limiter(-0.5).toMaster();
@@ -26,7 +27,7 @@ export let initSound = () => {
     comp.ratio.value = 20;   
     reverb = new Tone.Reverb({
         pre_delay: 0.05,
-        decay: 3,
+        decay: 5,
         wet: 0.6,
     }).connect(comp);
     reverb.generate();
@@ -41,6 +42,7 @@ export let initSound = () => {
         //"C2" : C2,
     }, function() {
       console.log('sample load!');
+      samplerLong.attack = 0.25;
       //samplerLong.triggerAttack("D3");
     }).connect(finalFilter);
     samplerShort = new Tone.Sampler({
@@ -64,7 +66,7 @@ export let initSound = () => {
 let initNote = () => {
     for (let i=0; i<noteNumber; i++) {
         genSineSynth(i);
-        
+        notePlaying[i] = false;
         //genFMSynth(i);
     }
     
@@ -115,27 +117,36 @@ export let triggerSound = (d) => {
             break;
         case 3:
             note = getNote(layer);
-            freq = Tone.Frequency(note).toFrequency()*0.8*dis;
+            freq = Tone.Frequency(note).toFrequency()*dis;
             break;
         default:
             break;
     }
     //let note = getFreq(layer);
     //let freq = note*0.8*dis;
-    
+    let filter = new Tone.Filter(freq, 'lowpass');
+    filter.Q.value = 2;
+
     if (d.leave !== true) {
         //mode ? note : Tone.Frequency(note)
         if (mode >= 2) {
             console.log('~')
-            samplerLong.triggerAttack(note); 
+            samplerLong.connect(filter).triggerAttack(note); 
         }
         else triggerActive(note);
         //triggerMetal(mode ? note : Tone.Frequency(note), dis*200+600, 12);
         return;
     }
-
-    let filter = new Tone.Filter(freq, 'lowpass');
-    filter.Q.value = 2;
+    
+    if (mode >= 2) {
+        if (notePlaying[layer]) return;
+        notePlaying[layer] = true;
+        samplerShort.connect(filter).triggerAttack(note);
+        setTimeout(()=>{
+            notePlaying[layer] = false;
+        }, noteDuration);
+        return;
+    }
     
     if (d.layer <= layerInner) {
         if (mode >= 2) samplerShort.triggerAttack(note);

@@ -106,7 +106,7 @@ class ControlPanel extends Component {
             globalScale: 5000000,
             globalPow: 0.45,
             maxLineLength: 100,
-            radioSpeed: 0.8,
+            radioSpeed: 0.5/2*Math.PI,
             lat: gpsData.lat,
             lon: gpsData.lon,
             centerName: 'center'
