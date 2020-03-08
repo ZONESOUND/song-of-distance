@@ -2,9 +2,10 @@ import Tone from 'tone';
 import C3 from './sound/C3_mid_long_44.1k.mp3';
 import C2 from './sound/C2_low_short_44.1k.mp3';
 
-let mode = 2; 
-let octave = 'CDEFGAB'; //start from index 1 so put C at second 
-let octaveStart = 2;
+let mode = 3; 
+//let octave = 'CDEFGAB'; //start from index 1 so put C at second 
+let octave = ['C', 'D', 'Eb', 'F', 'G', 'A', 'Bb'];
+let octaveStart = 3;
 let octaveMax = 6;
 
 let startFreq = Tone.Frequency('F3').toFrequency();
@@ -20,7 +21,8 @@ let noteTimeout = {};
 let noteSynth = {};
 
 export let initSound = () => {
-    comp = new Tone.Compressor(-30, 3).toMaster(); 
+    var limiter = new Tone.Limiter(-0.5).toMaster();
+    comp = new Tone.Compressor(-30, 3).connect(limiter); 
     comp.ratio.value = 20;   
     reverb = new Tone.Reverb({
         pre_delay: 0.05,
@@ -111,6 +113,10 @@ export let triggerSound = (d) => {
             note = getFreq(layer);
             freq = note*0.8*dis;
             break;
+        case 3:
+            note = getNote(layer);
+            freq = Tone.Frequency(note).toFrequency()*0.8*dis;
+            break;
         default:
             break;
     }
@@ -119,7 +125,7 @@ export let triggerSound = (d) => {
     
     if (d.leave !== true) {
         //mode ? note : Tone.Frequency(note)
-        if (mode === 2) {
+        if (mode >= 2) {
             console.log('~')
             samplerLong.triggerAttack(note); 
         }
@@ -132,7 +138,7 @@ export let triggerSound = (d) => {
     filter.Q.value = 2;
     
     if (d.layer <= layerInner) {
-        if (mode === 2) samplerShort.triggerAttack(note);
+        if (mode >= 2) samplerShort.triggerAttack(note);
         else {
             let membrane = new Tone.MembraneSynth ({
                 pitchDecay  : 0.001 ,
@@ -179,7 +185,7 @@ export let triggerSound = (d) => {
         return;
     }
     
-    //console.log(layer, note, freq);
+    console.log(layer, note, freq);
     //freq
     
     // var fmSynth = new Tone.FMSynth().chain(filter, reverb, comp);
@@ -242,7 +248,7 @@ let setRelease = (ind) => {
 }
 
 let scaleNumber = (number) => {
-    number = Math.floor(Math.pow(number, 1/1.5) + Math.floor(Math.random()*3) -1 ) - 1;
+    number = Math.floor(Math.pow(number, 1/1) + Math.floor(Math.random()*3) -1) - 1;
     return Math.max(Math.min(number, noteNumber-1), 0);
     //not sure if i need to use max(..,0);
 }
