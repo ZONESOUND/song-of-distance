@@ -1,25 +1,27 @@
 {
   "files": {
-    "main.css": "/song-of-distance/static/css/main.327d5dd1.chunk.css",
-    "main.js": "/song-of-distance/static/js/main.d6379523.chunk.js",
-    "main.js.map": "/song-of-distance/static/js/main.d6379523.chunk.js.map",
+    "main.css": "/song-of-distance/static/css/main.d7216246.chunk.css",
+    "main.js": "/song-of-distance/static/js/main.954f609d.chunk.js",
+    "main.js.map": "/song-of-distance/static/js/main.954f609d.chunk.js.map",
     "runtime-main.js": "/song-of-distance/static/js/runtime-main.3e03df9d.js",
     "runtime-main.js.map": "/song-of-distance/static/js/runtime-main.3e03df9d.js.map",
     "static/css/2.83ace7dd.chunk.css": "/song-of-distance/static/css/2.83ace7dd.chunk.css",
-    "static/js/2.34696dab.chunk.js": "/song-of-distance/static/js/2.34696dab.chunk.js",
-    "static/js/2.34696dab.chunk.js.map": "/song-of-distance/static/js/2.34696dab.chunk.js.map",
+    "static/js/2.9208c6be.chunk.js": "/song-of-distance/static/js/2.9208c6be.chunk.js",
+    "static/js/2.9208c6be.chunk.js.map": "/song-of-distance/static/js/2.9208c6be.chunk.js.map",
     "index.html": "/song-of-distance/index.html",
-    "precache-manifest.71ae6842575f051c722a8007d95a589c.js": "/song-of-distance/precache-manifest.71ae6842575f051c722a8007d95a589c.js",
+    "precache-manifest.a234d35a78a95c1472d7ab0dde66b265.js": "/song-of-distance/precache-manifest.a234d35a78a95c1472d7ab0dde66b265.js",
     "service-worker.js": "/song-of-distance/service-worker.js",
     "static/css/2.83ace7dd.chunk.css.map": "/song-of-distance/static/css/2.83ace7dd.chunk.css.map",
-    "static/css/main.327d5dd1.chunk.css.map": "/song-of-distance/static/css/main.327d5dd1.chunk.css.map",
+    "static/css/main.d7216246.chunk.css.map": "/song-of-distance/static/css/main.d7216246.chunk.css.map",
+    "static/media/C2_low_short_44.1k.mp3": "/song-of-distance/static/media/C2_low_short_44.1k.9d4cbcaa.mp3",
+    "static/media/C3_mid_long_44.1k.mp3": "/song-of-distance/static/media/C3_mid_long_44.1k.07d4d97c.mp3",
     "static/media/Settings-icon.png": "/song-of-distance/static/media/Settings-icon.43d7547b.png"
   },
   "entrypoints": [
     "static/js/runtime-main.3e03df9d.js",
     "static/css/2.83ace7dd.chunk.css",
-    "static/js/2.34696dab.chunk.js",
-    "static/css/main.327d5dd1.chunk.css",
-    "static/js/main.d6379523.chunk.js"
+    "static/js/2.9208c6be.chunk.js",
+    "static/css/main.d7216246.chunk.css",
+    "static/js/main.954f609d.chunk.js"
   ]
 }
