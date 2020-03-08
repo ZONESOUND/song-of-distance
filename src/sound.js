@@ -1,5 +1,8 @@
 import Tone from 'tone';
-let mode = 1; 
+import C3 from './sound/C3_mid_long_44.1k.mp3';
+import C2 from './sound/C2_low_short_44.1k.mp3';
+
+let mode = 2; 
 let octave = 'CDEFGAB'; //start from index 1 so put C at second 
 let octaveStart = 2;
 let octaveMax = 6;
@@ -11,21 +14,39 @@ let noteNumber = 9;
 let layerInner = 2;
 let layerOuter = 15;
 
-let noteDuration = 150;
-let synth, reverb, comp;
+let noteDuration = 300;
+let synth, reverb, comp, samplerLong, samplerShort, finalFilter;
 let noteTimeout = {};
 let noteSynth = {};
 
 export let initSound = () => {
-    comp = new Tone.Compressor(-30, 3).toMaster();    
+    comp = new Tone.Compressor(-30, 3).toMaster(); 
+    comp.ratio.value = 20;   
     reverb = new Tone.Reverb({
         pre_delay: 0.05,
         decay: 3,
         wet: 0.6,
     }).connect(comp);
     reverb.generate();
+    finalFilter = new Tone.Filter(6000, 'lowpass');
+    finalFilter.rolloff = -12;
+    finalFilter.connect(reverb);
     if (mode === 0) noteNumber = octave.length*(octaveMax-octaveStart+1);
     initNote();
+    console.log('sample here', C3);
+    samplerLong = new Tone.Sampler({
+        "C3" : C3,
+        //"C2" : C2,
+    }, function() {
+      console.log('sample load!');
+      //samplerLong.triggerAttack("D3");
+    }).connect(finalFilter);
+    samplerShort = new Tone.Sampler({
+        "C2" : C2,
+    }, function() {
+      console.log('short sample load!');
+      //sampler.triggerAttack("D3");
+    }).connect(finalFilter);
     //return;
     // synth = new Tone.Synth({
     //     oscillator : {type:'sine'} ,
@@ -54,7 +75,7 @@ let genSineSynth = (ind) => {
         envelope : {
             attack: 0.1 ,
             decay: 5 ,
-            sustain: 0.2 ,
+            sustain: 0.15 ,
             release: 0.5
         }});
     noteSynth[ind].envelope.decayCurve = 'exponential';
@@ -86,7 +107,10 @@ export let triggerSound = (d) => {
             note = getFreq(layer);
             freq = note*0.8*dis;
             break;
-    
+        case 2:
+            note = getFreq(layer);
+            freq = note*0.8*dis;
+            break;
         default:
             break;
     }
@@ -95,31 +119,38 @@ export let triggerSound = (d) => {
     
     if (d.leave !== true) {
         //mode ? note : Tone.Frequency(note)
-        triggerActive(note);
+        if (mode === 2) {
+            console.log('~')
+            samplerLong.triggerAttack(note); 
+        }
+        else triggerActive(note);
         //triggerMetal(mode ? note : Tone.Frequency(note), dis*200+600, 12);
         return;
     }
 
-    let filter = new Tone.Filter(freq, 'bandpass');
+    let filter = new Tone.Filter(freq, 'lowpass');
     filter.Q.value = 2;
     
     if (d.layer <= layerInner) {
-        let membrane = new Tone.MembraneSynth ({
-            pitchDecay  : 0.001 ,
-            octaves  : 2,
-            oscillator  : {
-            type  : 'sine'
-            }  ,
-            envelope  : {
-            attack  : 0.1 ,
-            decay  : 0.5 ,
-            sustain  : 0.05 ,
-            release  : 1.4 ,
-            attackCurve  : 'exponential'
-            }
-            }).chain(reverb);
-            //d.layer*Tone.Frequency('C4')
-        membrane.triggerAttackRelease(note, 1);
+        if (mode === 2) samplerShort.triggerAttack(note);
+        else {
+            let membrane = new Tone.MembraneSynth ({
+                pitchDecay  : 0.001 ,
+                octaves  : 2,
+                oscillator  : {
+                type  : 'sine'
+                }  ,
+                envelope  : {
+                attack  : 0.1 ,
+                decay  : 0.5 ,
+                sustain  : 0.05 ,
+                release  : 1.4 ,
+                attackCurve  : 'exponential'
+                }
+                }).chain(finalFilter);
+                //d.layer*Tone.Frequency('C4')
+            membrane.triggerAttackRelease(note, 1);
+        }
 
         return;
     }
@@ -173,7 +204,7 @@ let triggerActive = (note) => {
           sustain: 0,
           release: 0.3
         }
-    }).connect(reverb);
+    }).connect(finalFilter);
     synth.triggerAttackRelease(note, noteDuration/1000);
 }
 
@@ -199,7 +230,7 @@ let triggerMetal = (frequency, resonance, harmonicity) => {
 
 let setAttackRelease = (filter, ind, note) => {
     //(noteSynth[note].chain(filter, reverb, comp)).triggerAttack(note);
-    (noteSynth[ind].chain(filter,reverb)).triggerAttack(note);
+    (noteSynth[ind].chain(filter,finalFilter)).triggerAttack(note);
     noteTimeout[ind] = setTimeout(()=>{
         setRelease(ind);
     }, noteDuration);
@@ -211,7 +242,7 @@ let setRelease = (ind) => {
 }
 
 let scaleNumber = (number) => {
-    number = Math.floor(Math.pow(number, 1/1.2)) - 1;
+    number = Math.floor(Math.pow(number, 1/1.5) + Math.floor(Math.random()*3) -1 ) - 1;
     return Math.max(Math.min(number, noteNumber-1), 0);
     //not sure if i need to use max(..,0);
 }

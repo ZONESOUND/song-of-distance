@@ -88,8 +88,8 @@ export default function sketch (p) {
         radioDeg = calcDeg(configData.radioSpeed, p.frameCount);
 
         //emit radio
-        // if (p.frameCount % 30 === 0)
-        //     emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
+        if (p.frameCount % 30 === 0)
+            emitOSC('/gps/radio', (radioDeg/Math.PI*180).toFixed(5)*1.0)
 
         lightCounter++;
         p.background(255/lightCounter, 100);
@@ -213,15 +213,15 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData) {
         if (scanned){
             if (lastTrigger !== e){
                 //console.log(e);
-                // let d = JSON.stringify({
-                //     degree: e.degree,
-                //     dist: e.dist,
-                //     id: e.key,
-                //     data: e.data,
-                //     leave: e.leave,
-                //     timeStamp: e.timeStamp,
-                //     time_to_now_second: timeDelta,
-                // })
+                let d2 = JSON.stringify({
+                    degree: e.degree,
+                    dist: e.dist,
+                    id: e.key,
+                    data: e.data,
+                    leave: e.leave,
+                    timeStamp: e.timeStamp,
+                    time_to_now_second: timeDelta,
+                })
                
                 let d = {  
                     //layer: Math.ceil(Math.pow(e.dist/0.5, 1/configData.globalPow)*10/configData.globalScale),
@@ -233,7 +233,7 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData) {
                     pos: e.pos,
                 }
                 triggerSound(d);
-                //emitOSC('/gps/trigger', d);
+                emitOSC('/gps/trigger', d2);
             }
             lastTrigger = e;
         }
