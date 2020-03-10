@@ -16,6 +16,7 @@ class LocData extends Component {
     state = {
         gp: {},
         gpsPermission: null,
+        first: true,
         //allLocations: [],
         dataPoint: []
     }
@@ -44,7 +45,11 @@ class LocData extends Component {
     updateDataSet = (allLocations) => {
         console.log('updateDataset');
         
-        //this.checkData(allLocations);
+        if (this.state.first) {
+            this.checkData(allLocations);
+            this.setState({first: false});
+        }
+        
         this.setState({
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
             dataPoint: Object.entries(allLocations)
@@ -106,7 +111,7 @@ class ControlPanel extends Component {
             globalScale: 250000,
             globalPow: 0.58,
             maxLineLength: 100,
-            radioSpeed: 0.8,
+            radioSpeed: 0.5/2*Math.PI,
             lat: gpsData.lat,
             lon: gpsData.lon,
             centerName: 'center'

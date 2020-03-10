@@ -30,10 +30,10 @@ export function NameModal(props) {
                 dialogClassName={'black-modal-dialog'}
                 backdropClassName={'black-modal-backdrop'}>
             <Modal.Body bsPrefix={'black-modal-body'}>
-                <label htmlFor="name">Name your session</label> <br/>
+                <label htmlFor="name">Please Name Your Session</label> <br/>
                 <input id="name" type="text" placeholder={props.name} 
                     value={name} onChange={e => setName(e.target.value)}></input>
-                <span className="hint"> ⚠ 完整呈現作品，請打開聲音及定位。</span>           </Modal.Body>
+                <span className="hint"> ⚠ Turn on the audio and Location Services setting to have complete experience.</span>           </Modal.Body>
             <Modal.Footer bsPrefix={'black-modal-footer'}>
                 <Button variant="dark" size="sm" onClick={handleClose}>
                     Default
