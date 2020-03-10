@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a8dd8dfd6b1ddf1b495ef538bf5bb564",
+    "revision": "de87990fca20796deff7cbdf8b8e849c",
     "url": "/song-of-distance/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/song-of-distance/static/css/2.83ace7dd.chunk.css"
   },
   {
-    "revision": "50ee5003c166eee98060",
+    "revision": "3bacac451762167766ee",
     "url": "/song-of-distance/static/css/main.d7216246.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/song-of-distance/static/js/2.9208c6be.chunk.js"
   },
   {
-    "revision": "50ee5003c166eee98060",
-    "url": "/song-of-distance/static/js/main.335d9aeb.chunk.js"
+    "revision": "3bacac451762167766ee",
+    "url": "/song-of-distance/static/js/main.24e15db3.chunk.js"
   },
   {
     "revision": "c22877b491ea1a9af96d",
