@@ -180,6 +180,7 @@ class ControlPanel extends Component {
             console.log("Old Id Detected! use " + lastId)
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
+            showId = localStorage.getItem(SESSION_NAME);
         } else{
             myId = earthLocRef.push(gpsData).key;
             showId = getShowId(myId);
@@ -205,7 +206,6 @@ class ControlPanel extends Component {
             earthLocRef.child(this.state.key).child('showId').set(name);
             this.props.done(this.state.key);
         }
-            
         this.setState({data:{...this.state.data, centerName: name}, name: name});
 
     }
@@ -227,7 +227,7 @@ class ControlPanel extends Component {
 
         return (
             <>
-            <NameModal show={this.state.naming} name={data.centerName} 
+            <NameModal show={this.state.naming} name={this.state.name} 
                         onChange={this.changeCenterName}/>
             <P5Wrapper sketch={sketch} dataPoint={dataPoint}
                     configData={data} myId={gpsData.key}/>
