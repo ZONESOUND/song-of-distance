@@ -63,6 +63,8 @@ class LocData extends Component {
                 if (d[0] === this.state.key && d[1].leave) {
                     //console.log('QQ');
                     gpsData.timeStamp = Date.now();
+                    gpsData.showId = localStorage.getItem(SESSION_NAME) || getShowId(d[0]);
+                    //alert(gpsData.showId);
                     earthLocRef.child(this.state.key).set(gpsData);
                 }
                 return d[0] !== this.state.key && d[0]})
@@ -217,7 +219,7 @@ class ControlPanel extends Component {
 
     handleWindowBeforeUnload = (e) => {
         //console.log('unload');
-        earthLocRef.child(gpsData.key).child('leave').set(true);
+        earthLocRef.child(this.state.key).child('leave').set(true);
         return;
     }
 

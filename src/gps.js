@@ -1,5 +1,5 @@
 let gpsPermission = null;
-export let gpsData = {};
+export var gpsData = {};
 let id;
 let watchCallBack = null;
 export let setupGPS = (callback) => {
