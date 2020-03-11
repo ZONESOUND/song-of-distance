@@ -28,12 +28,6 @@ function showPosition(position) {
 }
     
 function watchPositionError(positionError)  {
-<<<<<<< HEAD
-   
-    console.log('fail!'+gpsHelp);
-=======
-    //console.log('fail!'+gpsHelp);
->>>>>>> merge/new/receiveOSC
     gpsPermission = false;
     switch (positionError.code) {
         // PERMISSION_DENIED

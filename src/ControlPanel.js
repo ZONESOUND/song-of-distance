@@ -58,7 +58,6 @@ class LocData extends Component {
         // }
         
         this.setState({
-<<<<<<< HEAD
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
             dataPoint: Object.entries(allLocations)
             .filter(d=> {
@@ -67,17 +66,10 @@ class LocData extends Component {
                     //gpsData.timeStamp = Date.now();
                     //earthLocRef.child(gpsData.key).set(gpsData);
                 }
-                return d[0] !== gpsData.key})
+                return d[0] !== gpsData.key && d[0]})
             .map(d => 
                 ({...d[1], key: d[0]}))
-=======
-            dataPoint: Object.entries(this.state.allLocations).filter((d) => {
-                return d[0] != gpsData.key && d[0];
-            }).map((d) => {
-                return ({...d[1], key: d[0]});
-            })
-                
->>>>>>> merge/new/receiveOSC
+
         })
         
     }
@@ -146,7 +138,6 @@ class ControlPanel extends Component {
         //GUI: new dat.GUI()
     }
 
-<<<<<<< HEAD
     componentDidMount() {
         console.log('????? componentDid mount');
         
@@ -156,14 +147,6 @@ class ControlPanel extends Component {
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
         //let {data, GUI} = this.state;
-=======
-    
-    componentDidMount() {
-        let data = this.addGPSKey();
-        //let dataStore = sessionStorage.getItem('controlData');
-        //console.log(dataStore);
-        let {GUI} = this.state;
->>>>>>> merge/new/receiveOSC
         //if (dataStore) {
         // data = JSON.parse(dataStore);
         //     this.setState({
@@ -190,12 +173,10 @@ class ControlPanel extends Component {
     addGPSKey = () => {
         console.log('add gps key');
         let myId;
+        let showId;
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
-<<<<<<< HEAD
-        let showId = localStorage.getItem(SESSION_NAME)
-=======
->>>>>>> merge/new/receiveOSC
+
         if (lastId && (Date.now() - lastIdTime < 60*60*1000)){
             console.log("Old Id Detected! use " + lastId)
             myId = lastId
@@ -243,10 +224,7 @@ class ControlPanel extends Component {
     render() {
         const {data} = this.state;
         let {dataPoint} = this.props;
-<<<<<<< HEAD
 
-=======
->>>>>>> merge/new/receiveOSC
         return (
             <>
             <NameModal show={this.state.naming} name={data.centerName} 
