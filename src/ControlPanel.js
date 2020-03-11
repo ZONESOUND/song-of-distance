@@ -18,7 +18,6 @@ class LocData extends Component {
         gp: {},
         gpsPermission: null,
         first: true,
-        listen: false,
         key: null,
         //allLocations: [],
         dataPoint: []
@@ -38,7 +37,6 @@ class LocData extends Component {
             //     allLocations: snapshot.val()
             // });
             //getAll();
-            console.log(this.state.key);
             this.updateDataSet(snapshot.val());
         });
     }
@@ -48,7 +46,6 @@ class LocData extends Component {
     }
 
     updateDataSet = (allLocations) => {
-        console.log('~~~updateDataset');
         
         if (this.state.first) {
             this.checkData(allLocations);
@@ -109,8 +106,7 @@ class LocData extends Component {
     }
 
     startListen = (key) => {
-        alert(key);
-        this.setState({listen: true, key: key});
+        this.setState({key: key});
     }
      
 
@@ -143,7 +139,6 @@ class ControlPanel extends Component {
     }
 
     componentDidMount() {
-        console.log('????? componentDid mount');
         
         this.addGPSKey();
         this.setState({naming: true});
@@ -197,7 +192,6 @@ class ControlPanel extends Component {
         if (!showId)
             showId = getShowId(myId);
         gpsData.showId = showId;
-        console.log('~~~earthLoc save self data@', gpsData.key);
 
         earthLocRef.child(myId).set(gpsData);
         this.setState({key:myId});
