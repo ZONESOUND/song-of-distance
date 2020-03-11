@@ -6,11 +6,11 @@ export let setupGPS = (callback) => {
     watchCallBack = callback;
     console.log('setup gps');
     let options = {
-      enableHighAccuracy: false,
-      timeout: 5000,
-      maximumAge: 0
+      enableHighAccuracy: true,
+      timeout: 60000,
+      maximumAge: Infinity
     };
-    id = navigator.geolocation.watchPosition(showPosition, watchPositionError, options);
+    id = navigator.geolocation.watchPosition(showPosition, watchPositionError);
 }
 export let gpsHelp = getSettingStr();
 

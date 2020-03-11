@@ -17,6 +17,7 @@ class LocData extends Component {
         gp: {},
         gpsPermission: null,
         first: true,
+        listen: false,
         //allLocations: [],
         dataPoint: []
     }
@@ -29,11 +30,13 @@ class LocData extends Component {
         console.log('setupGPS');
         setupGPS(this.gpsPermit);
         earthLocRef.on('value', (snapshot) => {
+            //if (!this.state.listen) return;
             //console.log(snapshot.val());
             // this.setState({
             //     allLocations: snapshot.val()
             // });
             //getAll();
+            console.log('key: ',gpsData.key, gpsData);
             this.updateDataSet(snapshot.val());
         });
     }
@@ -43,17 +46,26 @@ class LocData extends Component {
     }
 
     updateDataSet = (allLocations) => {
-        console.log('updateDataset');
+        console.log('~~~updateDataset');
         
         if (this.state.first) {
             this.checkData(allLocations);
             this.setState({first: false});
         }
+        // if (gpsData.key) {
+        //     gpsData.timeStamp = Date.now();
+        //     earthLocRef.child(gpsData.key).set(gpsData);
+        // }
         
         this.setState({
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
             dataPoint: Object.entries(allLocations)
             .filter(d=> {
+                if (d[0] == gpsData.key && d[1].leave) {
+                    console.log('QQ');
+                    //gpsData.timeStamp = Date.now();
+                    //earthLocRef.child(gpsData.key).set(gpsData);
+                }
                 return d[0] !== gpsData.key})
             .map(d => 
                 ({...d[1], key: d[0]}))
@@ -82,16 +94,20 @@ class LocData extends Component {
                     if (!e[1].leave){
                         earthLocRef.child(e[0]).child('leave').set(true)
                     }
-                } else{
-                    //如果沒有，設定為活躍
-                    if (e[1].leave){
-                        earthLocRef.child(e[0]).child('leave').set(false)    
-                    }
-                }
+                } 
+                // else{
+                //     //如果沒有，設定為活躍
+                //     if (e[1].leave){
+                //         earthLocRef.child(e[0]).child('leave').set(false)    
+                //     }
+                // }
             }
         })
     }
 
+    startListen = () => {
+        this.setState({listen: true});
+    }
      
 
     render() {
@@ -99,7 +115,7 @@ class LocData extends Component {
         return (<>
             <LocHintModal show={gpsPermission===false}/>
             <IntroModal show={false}/>
-            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint}/>}
+            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint} done={this.startListen}/>}
             </>
         );
     }
@@ -122,9 +138,11 @@ class ControlPanel extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("beforeunload", this.handleWindowBeforeUnload);
+        console.log('????? componentDid mount');
+        
         this.addGPSKey();
         this.setState({naming: true});
+        window.addEventListener("beforeunload", this.handleWindowBeforeUnload);
         //let dataStore = sessionStorage.getItem('controlData');
         //console.log(dataStore);
         //let {data, GUI} = this.state;
@@ -152,6 +170,7 @@ class ControlPanel extends Component {
     }
 
     addGPSKey = () => {
+        console.log('add gps key');
         let myId;
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
@@ -173,8 +192,12 @@ class ControlPanel extends Component {
         if (!showId)
             showId = getShowId(myId);
         gpsData.showId = showId;
+        console.log('~~~earthLoc save self data@', gpsData.key);
+
         earthLocRef.child(myId).set(gpsData);
+        
         this.changeCenterName(showId, false);
+        this.props.done();
     }
 
     changeCenterName = (name, updateFirebase) => {
@@ -190,6 +213,7 @@ class ControlPanel extends Component {
     }
 
     handleWindowBeforeUnload = (e) => {
+        console.log('unload');
         earthLocRef.child(gpsData.key).child('leave').set(true);
         return;
     }
