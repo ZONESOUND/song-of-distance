@@ -50,6 +50,7 @@ export default function sketch (p) {
             allDataPoint.forEach(e => {
                 if (!e) console.log('sth wrong?');
             })
+            console.log('receive!');
             updateDataPoint();
         }
         if (props.myId) {
@@ -65,7 +66,6 @@ export default function sketch (p) {
     }
 
     let updateDataPoint = () => {
-        console.log('updateDataPoint');
         let num = p.int(p.frameCount / 4);
         if (num) {
             let threshold = calcR(10, configData.globalScale, configData.globalPow);

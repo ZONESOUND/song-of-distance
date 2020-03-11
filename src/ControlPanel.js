@@ -7,6 +7,7 @@ import {gpsData, setupGPS} from './gps';
 import {NameModal} from './NameModal';
 import {IntroModal} from './IntroModal';
 import { LocHintModal } from './LocHintModal';
+import { thisExpression } from '@babel/types';
 
 const SESSION_ID = 'generative_geo_id';
 const SESSION_NAME = 'generative_name';
@@ -18,6 +19,7 @@ class LocData extends Component {
         gpsPermission: null,
         first: true,
         listen: false,
+        key: null,
         //allLocations: [],
         dataPoint: []
     }
@@ -36,7 +38,7 @@ class LocData extends Component {
             //     allLocations: snapshot.val()
             // });
             //getAll();
-            console.log('key: ',gpsData.key, gpsData);
+            console.log(this.state.key);
             this.updateDataSet(snapshot.val());
         });
     }
@@ -61,12 +63,12 @@ class LocData extends Component {
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
             dataPoint: Object.entries(allLocations)
             .filter(d=> {
-                if (d[0] == gpsData.key && d[1].leave) {
-                    console.log('QQ');
-                    //gpsData.timeStamp = Date.now();
-                    //earthLocRef.child(gpsData.key).set(gpsData);
+                if (d[0] === this.state.key && d[1].leave) {
+                    //console.log('QQ');
+                    gpsData.timeStamp = Date.now();
+                    earthLocRef.child(this.state.key).set(gpsData);
                 }
-                return d[0] !== gpsData.key && d[0]})
+                return d[0] !== this.state.key && d[0]})
             .map(d => 
                 ({...d[1], key: d[0]}))
 
@@ -91,11 +93,11 @@ class LocData extends Component {
             } else { //check offline
                 let timeDelta = Date.now()-e[1].timeStamp
                 //如果已離線>6秒，設定為離線
-                if (timeDelta > 6000){
-                    if (!e[1].leave){
-                        earthLocRef.child(e[0]).child('leave').set(true)
-                    }
-                } 
+                // if (timeDelta > 6000){
+                //     if (!e[1].leave){
+                //         earthLocRef.child(e[0]).child('leave').set(true)
+                //     }
+                // } 
                 // else{
                 //     //如果沒有，設定為活躍
                 //     if (e[1].leave){
@@ -106,8 +108,9 @@ class LocData extends Component {
         })
     }
 
-    startListen = () => {
-        this.setState({listen: true});
+    startListen = (key) => {
+        alert(key);
+        this.setState({listen: true, key: key});
     }
      
 
@@ -134,7 +137,8 @@ class ControlPanel extends Component {
             centerName: 'center'
         }, 
         name: 'center',
-        naming: false
+        naming: false,
+        key: null,
         //GUI: new dat.GUI()
     }
 
@@ -190,22 +194,24 @@ class ControlPanel extends Component {
         }
         
         gpsData.key = myId;
-        console.log(gpsData.key);
         if (!showId)
             showId = getShowId(myId);
         gpsData.showId = showId;
         console.log('~~~earthLoc save self data@', gpsData.key);
 
         earthLocRef.child(myId).set(gpsData);
-        
+        this.setState({key:myId});
+        this.props.done(myId);
         this.changeCenterName(showId, false);
-        this.props.done();
     }
 
     changeCenterName = (name, updateFirebase) => {
         localStorage.setItem(SESSION_NAME, name);
-        if (updateFirebase && gpsData.key) 
-            earthLocRef.child(gpsData.key).child('showId').set(name);
+        if (updateFirebase && this.state.key) {
+            earthLocRef.child(this.state.key).child('showId').set(name);
+            this.props.done(this.state.key);
+        }
+            
         this.setState({data:{...this.state.data, centerName: name}, name: name});
 
     }
@@ -216,7 +222,7 @@ class ControlPanel extends Component {
     }
 
     handleWindowBeforeUnload = (e) => {
-        console.log('unload');
+        //console.log('unload');
         earthLocRef.child(gpsData.key).child('leave').set(true);
         return;
     }
