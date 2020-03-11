@@ -3,11 +3,7 @@ import P5Wrapper from 'react-p5-wrapper';
 import sketch from './sketch';
 import {earthLocRef} from './firebase';
 import * as dat from 'dat.gui';
-import {gpsData, setupGPS} from './gps';
-import {NameModal} from './NameModal';
-import {IntroModal} from './IntroModal';
-import { LocHintModal } from './LocHintModal';
-import { thisExpression } from '@babel/types';
+import {useInterval} from './tool';
 
 const SESSION_ID = 'generative_geo_id';
 const SESSION_NAME = 'generative_name';
@@ -19,17 +15,13 @@ class LocData extends Component {
         gpsPermission: null,
         first: true,
         key: null,
-        //allLocations: [],
+        allLocations: [],
         dataPoint: []
-    }
-    gpsPermit = (b) => {
-        this.setState({gpsPermission: b});
     }
 
     componentDidMount() {
-        //this.initGPS();
-        console.log('setupGPS');
-        setupGPS(this.gpsPermit);
+        setInterval(()=>{this.checkData(this.state.allLocations)}, 10000);
+        //useInterval();
         earthLocRef.on('value', (snapshot) => {
             //if (!this.state.listen) return;
             //console.log(snapshot.val());
@@ -41,32 +33,12 @@ class LocData extends Component {
         });
     }
 
-    initGPS = () => {
-        
-    }
-
     updateDataSet = (allLocations) => {
-        
-        if (this.state.first) {
-            this.checkData(allLocations);
-            this.setState({first: false});
-        }
-        // if (gpsData.key) {
-        //     gpsData.timeStamp = Date.now();
-        //     earthLocRef.child(gpsData.key).set(gpsData);
-        // }
-        
+        this.checkData(allLocations);
         this.setState({
+            allLocations: allLocations,
             // dataPoint: Object.entries(this.state.allLocations).map(d => 
-            dataPoint: Object.entries(allLocations)
-            .filter(d=> {
-                if (d[0] === this.state.key && d[1].leave) {
-                    //console.log('QQ');
-                    gpsData.timeStamp = Date.now();
-                    earthLocRef.child(this.state.key).set(gpsData);
-                }
-                return d[0] !== this.state.key && d[0]})
-            .map(d => 
+            dataPoint: Object.entries(allLocations).map(d => 
                 ({...d[1], key: d[0]}))
 
         })
@@ -81,7 +53,7 @@ class LocData extends Component {
                 earthLocRef.child(e[0]).child('key').set(e[0]);
             }
             //如果沒有 showId 補上
-            if (!('showId' in e[1]) && e[0] ){
+            if ((!('showId' in e[1]) || !e[1].showId) && e[0] ){
                 earthLocRef.child(e[0]).child("showId").set(getShowId(e[0]))
             }
             //如果沒有時間戳或位置資料，移除該資料
@@ -90,11 +62,11 @@ class LocData extends Component {
             } else { //check offline
                 let timeDelta = Date.now()-e[1].timeStamp
                 //如果已離線>6秒，設定為離線
-                // if (timeDelta > 6000){
-                //     if (!e[1].leave){
-                //         earthLocRef.child(e[0]).child('leave').set(true)
-                //     }
-                // } 
+                if (timeDelta > 6000){
+                    if (!e[1].leave){
+                        earthLocRef.child(e[0]).child('leave').set(true)
+                    }
+                } 
                 // else{
                 //     //如果沒有，設定為活躍
                 //     if (e[1].leave){
@@ -105,17 +77,9 @@ class LocData extends Component {
         })
     }
 
-    startListen = (key) => {
-        this.setState({key: key});
-    }
-     
-
     render() {
-        let {gpsPermission} = this.state;
         return (<>
-            <LocHintModal show={gpsPermission===false}/>
-            <IntroModal show={false}/>
-            {gpsPermission && <ControlPanel dataPoint={this.state.dataPoint} done={this.startListen}/>}
+            <ControlPanel dataPoint={this.state.dataPoint}/>
             </>
         );
     }
@@ -128,97 +92,39 @@ class ControlPanel extends Component {
             globalPow: 0.58,
             maxLineLength: 100,
             radioSpeed: 0.5/2*Math.PI,
-            lat: gpsData.lat,
-            lon: gpsData.lon,
+            lat: 23.87,
+            lon: 120.58,
             centerName: 'center'
         }, 
-        name: 'center',
-        naming: false,
-        key: null,
-        //GUI: new dat.GUI()
+        GUI: new dat.GUI()
     }
 
     componentDidMount() {
-        
-        this.addGPSKey();
-        this.setState({naming: true});
-        window.addEventListener("beforeunload", this.handleWindowBeforeUnload);
-        //let dataStore = sessionStorage.getItem('controlData');
-        //console.log(dataStore);
-        //let {data, GUI} = this.state;
-        //if (dataStore) {
-        // data = JSON.parse(dataStore);
-        //     this.setState({
-        //         data: data
-        //     })
-        //} 
-        // const btn = {'add config': this.saveControlData};
-        // GUI.add(data,"globalScale",1000,800000)
-        // GUI.add(data,"globalPow",0,0.99)
-        // GUI.add(data,"maxLineLength")
-        // GUI.add(data,'radioSpeed',0,3,0.01)
-        // GUI.add(data,'centerName')
-        // GUI.add(data,'lat',-90,90,0.01)
-        // GUI.add(data,'lon',-180,180,0.01)
-        // GUI.add(btn, 'add config');
+        let dataStore = sessionStorage.getItem('controlData');
+        console.log(dataStore);
+        let {data, GUI} = this.state;
+        if (dataStore) {
+        data = JSON.parse(dataStore);
+            this.setState({
+                data: data
+            })
+        } 
+        const btn = {'add config': this.saveControlData};
+        GUI.add(data,"globalScale",1000,800000)
+        GUI.add(data,"globalPow",0,0.99)
+        GUI.add(data,"maxLineLength")
+        GUI.add(data,'radioSpeed',0,3,0.01)
+        GUI.add(data,'centerName')
+        GUI.add(data,'lat',-90,90,0.01)
+        GUI.add(data,'lon',-180,180,0.01)
+        GUI.add(btn, 'add config');
 
-        // GUI.close()
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("beforeunload", this.handleWindowBeforeUnload);
-    }
-
-    addGPSKey = () => {
-        console.log('add gps key');
-        let myId;
-        let showId;
-        let lastId = localStorage.getItem(SESSION_ID)
-        let lastIdTime = localStorage.getItem(SESSION_TIME)
-
-        if (lastId && (Date.now() - lastIdTime < 60*60*1000)){
-            console.log("Old Id Detected! use " + lastId)
-            myId = lastId
-            localStorage.setItem(SESSION_TIME, Date.now())
-            showId = localStorage.getItem(SESSION_NAME);
-        } else{
-            myId = earthLocRef.push(gpsData).key;
-            showId = getShowId(myId);
-            console.log("Generate new id " + myId)
-            localStorage.setItem(SESSION_ID,myId)
-            localStorage.setItem(SESSION_TIME, Date.now())
-        }
-        
-        gpsData.key = myId;
-        if (!showId)
-            showId = getShowId(myId);
-        gpsData.showId = showId;
-
-        earthLocRef.child(myId).set(gpsData);
-        this.setState({key:myId});
-        this.props.done(myId);
-        this.changeCenterName(showId, false);
-    }
-
-    changeCenterName = (name, updateFirebase) => {
-        localStorage.setItem(SESSION_NAME, name);
-        if (updateFirebase && this.state.key) {
-            earthLocRef.child(this.state.key).child('showId').set(name);
-            this.props.done(this.state.key);
-        }
-        this.setState({data:{...this.state.data, centerName: name}, name: name});
-
+        GUI.close()
     }
     
     saveControlData = () => {
         let {data} = this.state;
         sessionStorage.setItem('controlData', JSON.stringify({...data}));
-    }
-
-    handleWindowBeforeUnload = (e) => {
-        //console.log('unload');
-        earthLocRef.child(gpsData.key).child('leave').set(true);
-        return;
     }
 
     render() {
@@ -227,10 +133,8 @@ class ControlPanel extends Component {
 
         return (
             <>
-            <NameModal show={this.state.naming} name={this.state.name} 
-                        onChange={this.changeCenterName}/>
             <P5Wrapper sketch={sketch} dataPoint={dataPoint}
-                    configData={data} myId={gpsData.key}/>
+                    configData={data}/>
             </>
         )
 

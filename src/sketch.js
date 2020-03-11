@@ -14,14 +14,14 @@ export default function sketch (p) {
     let myId;
     let testBtn;
 
-    receiveOSC((data)=>{
-        if (data.address == '/gps/trigger'){
-            let scanId = JSON.parse(data.args[0].value).id
-            if (scanId == myId){
-                lightCounter = 0;
-            }
-        }
-    });
+    // receiveOSC((data)=>{
+    //     if (data.address == '/gps/trigger'){
+    //         let scanId = JSON.parse(data.args[0].value).id
+    //         if (scanId == myId){
+    //             lightCounter = 0;
+    //         }
+    //     }
+    // });
 
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
@@ -48,13 +48,10 @@ export default function sketch (p) {
         if (props.dataPoint && Object.keys(configData).length !== 0){
             allDataPoint = props.dataPoint;
             allDataPoint.forEach(e => {
+                //console.log(e.showId);
                 if (!e) console.log('sth wrong?');
             })
-            console.log('receive!');
             updateDataPoint();
-        }
-        if (props.myId) {
-            myId = props.myId;
         }
     };
 
@@ -67,9 +64,10 @@ export default function sketch (p) {
 
     let updateDataPoint = () => {
         let num = p.int(p.frameCount / 4);
+        //console.log(num);
         if (num) {
-            let threshold = calcR(10, configData.globalScale, configData.globalPow);
-            dataPoint = allDataPoint.slice(-num).map(dataPointMap).filter((e) => e.dist < threshold);
+            //let threshold = calcR(10, configData.globalScale, configData.globalPow);
+            dataPoint = allDataPoint.slice(-num).map(dataPointMap).filter((e) => e.dist < configData.maxLineLength);
         }
         enableUpdate = num > allDataPoint.length ? false : true;
     }
