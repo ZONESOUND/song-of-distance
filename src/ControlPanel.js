@@ -28,7 +28,7 @@ class LocData extends Component {
 
     componentDidMount() {
         //this.initGPS();
-        console.log('setupGPS');
+        //console.log('setupGPS');
         setupGPS(this.gpsPermit);
         earthLocRef.on('value', (snapshot) => {
             //if (!this.state.listen) return;
@@ -172,21 +172,21 @@ class ControlPanel extends Component {
     }
 
     addGPSKey = () => {
-        console.log('add gps key');
+        //console.log('add gps key');
         let myId;
         let showId;
         let lastId = localStorage.getItem(SESSION_ID)
         let lastIdTime = localStorage.getItem(SESSION_TIME)
 
         if (lastId && (Date.now() - lastIdTime < 60*60*1000)){
-            console.log("Old Id Detected! use " + lastId)
+            //console.log("Old Id Detected! use " + lastId)
             myId = lastId
             localStorage.setItem(SESSION_TIME, Date.now())
             showId = localStorage.getItem(SESSION_NAME);
         } else{
             myId = earthLocRef.push(gpsData).key;
             showId = getShowId(myId);
-            console.log("Generate new id " + myId)
+            //console.log("Generate new id " + myId)
             localStorage.setItem(SESSION_ID,myId)
             localStorage.setItem(SESSION_TIME, Date.now())
         }

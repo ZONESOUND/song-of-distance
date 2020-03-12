@@ -26,7 +26,7 @@ export default function sketch (p) {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
         p.frameRate(30);
-        console.log('issocketConnect:' + isSocketConnect);
+        //console.log('issocketConnect:' + isSocketConnect);
         initSound();
         // for test
         // testBtn = p.createButton('yo');
@@ -47,10 +47,10 @@ export default function sketch (p) {
         }
         if (props.dataPoint && Object.keys(configData).length !== 0){
             allDataPoint = props.dataPoint;
-            allDataPoint.forEach(e => {
-                if (!e) console.log('sth wrong?');
-            })
-            console.log('receive!');
+            // allDataPoint.forEach(e => {
+            //     if (!e) console.log('sth wrong?');
+            // })
+            //console.log('receive!');
             updateDataPoint();
         }
         if (props.myId) {
@@ -204,7 +204,7 @@ function drawDataPoint(p, dataPoint, radioDeg, lastRadioDeg, configData) {
         let angleDelta = -1000
         let nowId = e.showId;
         if (!e.pos) {
-            console.log('no position?');
+            //console.log('no position?');
             return;
         }
         angleDelta = dataDegree - radioDeg;
